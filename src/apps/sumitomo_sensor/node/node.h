@@ -27,7 +27,7 @@ class Node {
 
   void UpdateLeds(int64_t now_micros);
   void ReadIrSensor(int64_t now_micros);
-  void HandleMessages (int64_t now_micros);
+  void HandleMessages(int64_t now_micros);
 
   bool MaybeProcessStatusQueryMessage(int64_t now_micros);
   bool MaybeProcessBroadcastChannelMessage(int64_t now_micros);
@@ -38,7 +38,7 @@ class Node {
 
   IrSensor ir_sensor_;
 
-  int node_id_ = 0;
+  uint8_t node_id_ = 0;
 
   TimeConverter time_;
   Hc12Antenna hc12_;

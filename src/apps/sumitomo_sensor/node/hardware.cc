@@ -1,6 +1,7 @@
 #include "apps/sumitomo_sensor/node/hardware.h"
 
-#include "Arduino.h"
+#include <Arduino.h>
+
 #include "apps/sumitomo_sensor/node/board.h"
 #include "drivers/dip_switch.h"
 #include "drivers/gpio.h"

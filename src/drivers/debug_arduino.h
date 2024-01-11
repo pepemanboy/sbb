@@ -55,7 +55,7 @@ class DebugSingleton {
   do {                                                     \
     if (sbb::debug_internal::DebugSingleton::getInstance() \
             .is_debug_enabled()) {                         \
-      ConsolePrintF(__VA_ARGS__);                           \
+      ConsolePrintF(__VA_ARGS__);                          \
     }                                                      \
   } while (0)
 

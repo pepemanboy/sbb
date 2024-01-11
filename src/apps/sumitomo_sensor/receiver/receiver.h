@@ -1,6 +1,8 @@
 #ifndef SBB_SUMITOMO_SENSOR_RECEIVER_RECEIVER_H
 #define SBB_SUMITOMO_SENSOR_RECEIVER_RECEIVER_H
 
+#include <stdint.h>
+
 #include "apps/sumitomo_sensor/message_definitions.h"
 #include "apps/sumitomo_sensor/receiver/config.h"
 #include "apps/sumitomo_sensor/receiver/hardware.h"
@@ -10,8 +12,6 @@
 #include "common/time_converter.h"
 #include "common/timer.h"
 #include "drivers/hc12_antenna_arduino.h"
-#include "stdint.h"
-
 
 namespace sbb {
 namespace sumitomo_sensor {

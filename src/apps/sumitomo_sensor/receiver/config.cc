@@ -7,7 +7,7 @@ namespace receiver {
 ReceiverConfig GetConfig() {
   return {
       .receiver_channel = 10,
-      .node_addresses = {10, 11},
+      .node_addresses = {11, 12},
       .num_nodes = 2,
   };
 }

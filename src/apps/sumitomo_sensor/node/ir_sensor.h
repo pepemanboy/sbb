@@ -5,12 +5,12 @@
 #include "common/rising_edge_detector.h"
 
 namespace sbb {
-namespace sumitomo_sensor{
+namespace sumitomo_sensor {
 namespace node {
 
 class IrSensor {
-public:
-  // Returns true on debounced `reading` rising edge. 
+ public:
+  // Returns true on debounced `reading` rising edge.
   bool Poll(bool reading, int64_t micros) {
     const bool debounced_state = debounce_.Poll(reading, micros);
     return rising_edge_detector_.Update(debounced_state);
@@ -18,7 +18,7 @@ public:
 
   bool debounced_state() { return debounce_.debounced_state(); }
 
-private:
+ private:
   Debounce debounce_;
   RisingEdgeDetector rising_edge_detector_;
 };

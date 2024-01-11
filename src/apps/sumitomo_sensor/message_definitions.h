@@ -1,10 +1,10 @@
 #ifndef SBB_APPS_SUMITOMO_SENSOR_MESSAGE_DEFINITIONS_H
 #define SBB_APPS_SUMITOMO_SENSOR_MESSAGE_DEFINITIONS_H
 
-#include "stdint.h"
+#include <stdint.h>
 
+#include "apps/sumitomo_sensor/event.h"
 #include "common/array_size.h"
-#include "event.h"
 
 namespace sbb {
 namespace sumitomo_sensor {
@@ -16,7 +16,7 @@ constexpr int kMaxNumNodes = 10;
 struct StatusQueryMessage {
   static constexpr int kId = 1;
 
-  uint32_t sequence;    
+  uint32_t sequence;
 };
 
 struct StatusResponseMessage {
@@ -35,7 +35,7 @@ struct BroadcastChannelMessage {
   uint8_t num_nodes;
 };
 
-}  // sumitomo_sensor
+}  // namespace sumitomo_sensor
 }  // namespace sbb
 
 #endif  // SBB_APPS_SUMITOMO_SENSOR_MESSAGE_DEFINITIONS_H

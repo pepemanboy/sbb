@@ -114,7 +114,7 @@ bool Node::MaybeProcessBroadcastChannelMessage(int64_t now_micros) {
     }
   }
 
-  return true; 
+  return true;
 }
 
 }  // namespace node

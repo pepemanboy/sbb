@@ -1,7 +1,7 @@
 #ifndef SBB_COMMON_DEBOUNCE_H
 #define SBB_COMMON_DEBOUNCE_H
 
-#include "stdio.h"
+#include <stdint.h>
 
 namespace sbb {
 

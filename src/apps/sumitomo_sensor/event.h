@@ -1,7 +1,7 @@
 #ifndef SBB_APPS_SUMITOMO_SENSOR_EVENT_H
 #define SBB_APPS_SUMITOMO_SENSOR_EVENT_H
 
-#include "stdint.h"
+#include <stdint.h>
 
 namespace sbb {
 namespace sumitomo_sensor {
@@ -11,7 +11,7 @@ struct Event {
   uint32_t sequence;
 };
 
-}  // sbb
-}  // sumitomo sensor
+}  // namespace sumitomo_sensor
+}  // namespace sbb
 
 #endif  // SBB_APPS_SUMITOMO_SENSOR_EVENTS_H

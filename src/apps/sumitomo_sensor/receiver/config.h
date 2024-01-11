@@ -1,7 +1,8 @@
 #ifndef SBB_APPS_SUMITOMO_SENSOR_RECEIVER_CONFIG_H
 #define SBB_APPS_SUMITOMO_SENSOR_RECEIVER_CONFIG_H
 
-#include "stdint.h"
+#include <stdint.h>
+
 #include "apps/sumitomo_sensor/message_definitions.h"
 
 namespace sbb {

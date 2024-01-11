@@ -1,6 +1,6 @@
-#include "drivers/gpio.h"
-
 #include <Arduino.h>
+
+#include "drivers/gpio.h"
 
 namespace sbb {
 

@@ -1,6 +1,6 @@
 #include "common/debounce.h"
 
-#include "stdint.h"
+#include <stdint.h>
 
 namespace sbb {
 

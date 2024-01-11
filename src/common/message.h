@@ -1,7 +1,7 @@
 #ifndef SBB_COMMON_MESSAGE_H
 #define SBB_COMMON_MESSAGE_H
 
-#include "stdint.h"
+#include <stdint.h>
 
 #include "common/span.h"
 #include "drivers/debug_arduino.h"

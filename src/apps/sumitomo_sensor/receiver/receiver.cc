@@ -1,6 +1,5 @@
 #include "apps/sumitomo_sensor/receiver/receiver.h"
 
-#include <stdarg.h>
 #include <stdint.h>
 
 #include "apps/sumitomo_sensor/message_definitions.h"
@@ -9,16 +8,16 @@
 #include "common/array_size.h"
 #include "common/math.h"
 #include "drivers/clock.h"
+#include "drivers/console.h"
 #include "drivers/debug_arduino.h"
 #include "drivers/hc12_antenna_arduino.h"
-#include "drivers/console.h"
 
 namespace sbb {
 namespace sumitomo_sensor {
 namespace receiver {
 namespace {
 
-constexpr int64_t kPollNodeInterval_micros = 3000000;            // 3s
+constexpr int64_t kPollNodeInterval_micros = 3000000;           // 3s
 constexpr int64_t kBroadcastChannelInterval_micros = 30000000;  // 30s
 
 BroadcastChannelMessage BuildBroadcastChannelMessage(
@@ -90,8 +89,8 @@ void Receiver::PollNode(int64_t now_micros) {
   // Wait for response.
   const Span rx = hc12_.ReadBytesUntil(0);
   if (rx.length > 0) {
-    ConsolePrintF(
-      "dispositivo %d ok", config_.node_addresses[next_node_index_]);
+    ConsolePrintF("dispositivo %d ok",
+                  config_.node_addresses[next_node_index_]);
 
     StatusResponseMessage response;
     if (unpacker_.Unpack(rx.buffer, rx.length) &&
@@ -99,8 +98,8 @@ void Receiver::PollNode(int64_t now_micros) {
       if (response.has_event) {
         const int32_t millis_age =
             (response.micros - response.event.micros) / 1000;
-        ConsolePrintF("pulso en dispositivo %d, hace %ld milisegundos",
-                address, millis_age);
+        ConsolePrintF("pulso en dispositivo %d, hace %ld milisegundos", address,
+                      millis_age);
         node_sequences_[next_node_index_] = response.event.sequence;
       }
     }

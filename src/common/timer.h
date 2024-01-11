@@ -1,7 +1,7 @@
 #ifndef SBB_COMMON_TIMER_H
 #define SBB_COMMON_TIMER_H
 
-#include "stdint.h"
+#include <stdint.h>
 
 #include "common/maybe_valid.h"
 

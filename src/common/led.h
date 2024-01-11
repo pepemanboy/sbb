@@ -1,7 +1,7 @@
 #ifndef SBB_COMMON_LED_H
 #define SBB_COMMON_LED_H
 
-#include "stdint.h"
+#include <stdint.h>
 
 namespace sbb {
 

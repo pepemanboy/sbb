@@ -1,9 +1,10 @@
 #ifndef SBB_APPS_SUMITOMO_SENSOR_RECEIVER_HEART_BEATS_H
 #define SBB_APPS_SUMITOMO_SENSOR_RECEIVER_HEART_BEATS_H
 
+#include <stdint.h>
+
 #include "apps/sumitomo_sensor/message_definitions.h"
 #include "common/maybe_valid.h"
-#include "stdint.h"
 
 namespace sbb {
 namespace sumitomo_sensor {

@@ -1,6 +1,6 @@
-#include "drivers/dip_switch.h"
+#include <Arduino.h>
 
-#include "Arduino.h"
+#include "drivers/dip_switch.h"
 
 namespace sbb {
 

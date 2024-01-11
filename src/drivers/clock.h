@@ -1,7 +1,7 @@
 #ifndef SBB_DRIVERS_CLOCK_H
 #define SBB_DRIVERS_CLOCK_H
 
-#include "stdint.h"
+#include <stdint.h>
 
 namespace sbb {
 
