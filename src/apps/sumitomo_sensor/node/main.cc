@@ -1,7 +1,7 @@
 #include <Arduino.h>
-#include "apps/sumitomo_sensor/sensor.h"
+#include "apps/sumitomo_sensor/node/node.h"
 
-using App = sbb::sumitomo_sensor::Sensor;
+using App = sbb::sumitomo_sensor::node::Node;
 
 App app = {};
 

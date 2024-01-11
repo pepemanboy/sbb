@@ -3,7 +3,10 @@
 
 #include <Arduino.h>
 
+#include "drivers/console.h"
+
 namespace sbb {
+namespace debug_internal {
 
 class DebugSingleton {
  public:
@@ -17,9 +20,9 @@ class DebugSingleton {
 
   void EnableDebug(bool enable) {
     if (enable) {
-      Serial.begin(9600);
+      ConsoleInit();
     } else {
-      Serial.end();
+      ConsoleClose();
     }
     is_debug_enabled_ = enable;
   }
@@ -32,18 +35,28 @@ class DebugSingleton {
   bool is_debug_enabled_ = false;
 };
 
-#define SBB_DEBUG_ENABLE()                           \
-  do {                                               \
-    DebugSingleton::getInstance().EnableDebug(true); \
-  } while (0)
-
-#define SBB_DEBUG(x)                                        \
-  do {                                                      \
-    if (DebugSingleton::getInstance().is_debug_enabled()) { \
-      Serial.println(x);                                    \
-    }                                                       \
-  } while (0)
-
+}  // namespace debug_internal
 }  // namespace sbb
+
+#define SBB_DEBUG_ENABLE()                                                \
+  do {                                                                    \
+    sbb::debug_internal::DebugSingleton::getInstance().EnableDebug(true); \
+  } while (0)
+
+#define SBB_DEBUG(x)                                       \
+  do {                                                     \
+    if (sbb::debug_internal::DebugSingleton::getInstance() \
+            .is_debug_enabled()) {                         \
+      Serial.println(x);                                   \
+    }                                                      \
+  } while (0)
+
+#define SBB_DEBUGF(...)                                    \
+  do {                                                     \
+    if (sbb::debug_internal::DebugSingleton::getInstance() \
+            .is_debug_enabled()) {                         \
+      ConsolePrintF(__VA_ARGS__);                           \
+    }                                                      \
+  } while (0)
 
 #endif  // SBB_DRIVERS_DEBUG_ARDUINO_H

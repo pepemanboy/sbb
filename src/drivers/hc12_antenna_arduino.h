@@ -15,7 +15,7 @@ class Hc12Antenna {
     int set_pin;
   };
 
-  explicit Hc12Antenna(Options options)
+  explicit Hc12Antenna(const Options& options)
       : options_(options), hc12_serial_(options_.rx_pin, options_.tx_pin){};
 
   Status Setup(int channel);

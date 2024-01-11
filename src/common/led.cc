@@ -1,7 +1,5 @@
 #include "common/led.h"
 
-#include <Arduino.h>
-
 namespace sbb {
 
 bool Led::Poll(int64_t micros) {

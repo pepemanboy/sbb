@@ -1,10 +1,9 @@
-#ifndef SUMITOMO_SENSOR_HARDWARE_H
-#define SUMITOMO_SENSOR_HARDWARE_H
-
-#include "stdint.h"
+#ifndef SBB_SUMITOMO_SENSOR_NODE_HARDWARE_H
+#define SBB_SUMITOMO_SENSOR_NODE_HARDWARE_H
 
 namespace sbb {
 namespace sumitomo_sensor {
+namespace node {
 
 void HardwareInit();
 
@@ -12,7 +11,12 @@ void HardwareLedGreenSet(bool state);
 void HardwareLedRedSet(bool state);
 void HardwareLedYellowSet(bool state);
 
+bool HardwareIrSensorGet();
+
+int HardwareDipSwitchGet();
+
+}  // node
 }  // namespace sumitomo_sensor
 }  // namespace sbb
 
-#endif  // SUMITOMO_SENSOR_HARDWARE_H
+#endif  // SBB_SUMITOMO_SENSOR_NODE_HARDWARE_H

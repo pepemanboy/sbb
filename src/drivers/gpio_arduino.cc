@@ -1,6 +1,6 @@
-#include <Arduino.h>
-
 #include "drivers/gpio.h"
+
+#include <Arduino.h>
 
 namespace sbb {
 
@@ -23,6 +23,12 @@ void GpioSet(const GpioPin &gpio, bool state) {
   }
 }
 
-bool GpioGet(const GpioPin &gpio) { return digitalRead(gpio.pin); }
+bool GpioGet(const GpioPin &gpio) {
+  if (gpio.polarity == GpioPolarity::kActiveHigh) {
+    return digitalRead(gpio.pin) == HIGH;
+  } else {  // GpioPolarity::kActiveLow
+    return digitalRead(gpio.pin) == LOW;
+  }
+}
 
 }  // namespace sbb

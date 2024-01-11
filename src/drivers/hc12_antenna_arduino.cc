@@ -10,18 +10,23 @@ namespace {
 
 constexpr int kDefaultBaudRate = 9600;
 constexpr int kSerialTimeout_ms = 1000;
-constexpr int kMaxSetupRetries = 10;
+constexpr int kMaxSetupRetries = 3;
 
 }  // namespace
 
 Status Hc12Antenna::ConfigureParameter(char *query) {
-  hc12_serial_.println(query);
   SBB_DEBUG(query);
-  size_t l = hc12_serial_.readBytes(rx_buffer_, sizeof(rx_buffer_));
+  hc12_serial_.println(query);
   hc12_serial_.flush();
+
+  const size_t l = hc12_serial_.readBytes(rx_buffer_, sizeof(rx_buffer_));
   rx_buffer_[l] = '\0';
   SBB_DEBUG((char *)rx_buffer_);
-  if (!strstr((char *)rx_buffer_, "OK")) return Status::kError;
+
+  if (!strstr((char *)rx_buffer_, "OK")) {
+    SBB_DEBUG(F("Error configuring parameter"));
+    return Status::kError;
+  }
   return Status::kOk;
 }
 
@@ -31,37 +36,55 @@ Status Hc12Antenna::Setup(int channel) {
 
   int retries = 0;
   while (SetupOneTime(channel) != Status::kOk) {
-    SBB_DEBUG((char *)"Retrying");
-    if (retries++ > kMaxSetupRetries) return Status::kError;
+    if (retries++ > kMaxSetupRetries) {
+      SBB_DEBUG(F("Could not configure"));
+      return Status::kError;
+    } else {
+      SBB_DEBUG(F("Retrying"));
+    }
   }
   return Status::kOk;
 }
 
 Status Hc12Antenna::SetupOneTime(int channel) {
   Status status;
+
   pinMode(options_.set_pin, OUTPUT);
   pinMode(options_.rx_pin, INPUT);
   pinMode(options_.tx_pin, OUTPUT);
+  delay(250);
 
-  SBB_DEBUG((char *)"Starting HC12 setup");
+  SBB_DEBUG(F("Starting HC12 setup"));
 
-  SBB_DEBUG((char *)"Setting set pin LOW");
+  SBB_DEBUG(F("Setting set pin LOW"));
   digitalWrite(options_.set_pin, LOW);  // Enter setup mode
   delay(250);                           // As per datasheet
 
   char buf[20];
+  SBB_DEBUG(F("Setting default settings"));
+  sprintf(buf, "AT+DEFAULT");
+  status = ConfigureParameter(buf);
+  if (status != Status::kOk) {
+    SBB_DEBUG(F("Setting pin HIGH"));
+    digitalWrite(options_.set_pin, HIGH);  // Exit setup mode
+    return status;
+  }
 
-  SBB_DEBUG((char *)"Configuring channel");
+  SBB_DEBUG(F("Configuring channel"));
   sprintf(buf, "AT+C%03hu", channel);
   status = ConfigureParameter(buf);
-  if (status != Status::kOk) return status;
+  if (status != Status::kOk) {
+    SBB_DEBUG(F("Setting pin HIGH"));
+    digitalWrite(options_.set_pin, HIGH);  // Exit setup mode
+    return status;
+  }
 
-  SBB_DEBUG((char *)"Setting pin HIGH");
+  SBB_DEBUG(F("Setting pin HIGH"));
   digitalWrite(options_.set_pin, HIGH);  // Exit setup mode
   delay(250);                            // As per datasheet
 
   channel_ = channel;  // Acknowledge channel set
-  SBB_DEBUG((char *)"Finished HC12 setup");
+  SBB_DEBUG(F("Finished HC12 setup"));
 
   return Status::kOk;
 }

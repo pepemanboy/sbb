@@ -1,5 +1,5 @@
 #ifndef SBB_DRIVERS_GPIO_H
-#define SBB_DRIVERS_GIPO_H
+#define SBB_DRIVERS_GPIO_H
 
 namespace sbb {
 
