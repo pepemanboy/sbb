@@ -11,7 +11,7 @@ namespace sumitomo_sensor {
 
 constexpr int kDefaultChannel = 1;
 constexpr int kReceiverAddress = 0;
-constexpr int kMaxNumNodes = 10;
+constexpr int kMaxNumNodes = 64;
 
 struct StatusQueryMessage {
   static constexpr int kId = 1;
@@ -31,8 +31,7 @@ struct BroadcastChannelMessage {
   static constexpr int kId = 3;
 
   uint8_t channel;
-  uint8_t node_addresses[kMaxNumNodes];
-  uint8_t num_nodes;
+  uint64_t node_address_mask;
 };
 
 }  // namespace sumitomo_sensor

@@ -6,6 +6,7 @@
 #include "apps/sumitomo_sensor/receiver/board.h"
 #include "apps/sumitomo_sensor/receiver/config.h"
 #include "common/array_size.h"
+#include "common/bits.h"
 #include "common/math.h"
 #include "drivers/clock.h"
 #include "drivers/console.h"
@@ -19,18 +20,6 @@ namespace {
 
 constexpr int64_t kPollNodeInterval_micros = 3000000;           // 3s
 constexpr int64_t kBroadcastChannelInterval_micros = 30000000;  // 30s
-
-BroadcastChannelMessage BuildBroadcastChannelMessage(
-    const ReceiverConfig &config) {
-  BroadcastChannelMessage message = {};
-  message.channel = config.receiver_channel;
-  message.num_nodes = config.num_nodes;
-  for (int i = 0; i < config.num_nodes; ++i) {
-    message.node_addresses[i] = config.node_addresses[i];
-  }
-
-  return message;
-}
 
 }  // namespace
 
@@ -80,7 +69,8 @@ void Receiver::UpdateLed(int64_t now_micros) {
 void Receiver::PollNode(int64_t now_micros) {
   // Send query to node.
   const uint32_t sequence = node_sequences_[next_node_index_];
-  const uint8_t address = config_.node_addresses[next_node_index_];
+  const uint8_t address =
+      NthSetBitIndex(config_.node_address_mask, next_node_index_);
   const StatusQueryMessage query = {.sequence = sequence};
   const Span packet = serializer_.Serialize(address, query);
   hc12_.Write(packet);
@@ -89,8 +79,7 @@ void Receiver::PollNode(int64_t now_micros) {
   // Wait for response.
   const Span rx = hc12_.ReadBytesUntil(0);
   if (rx.length > 0) {
-    ConsolePrintF("dispositivo %d ok",
-                  config_.node_addresses[next_node_index_]);
+    ConsolePrintF("dispositivo %d ok", address);
 
     StatusResponseMessage response;
     if (unpacker_.Unpack(rx.buffer, rx.length) &&
@@ -106,7 +95,8 @@ void Receiver::PollNode(int64_t now_micros) {
   }
 
   // Next node.
-  IncrementAndWrap(&next_node_index_, 0, config_.num_nodes - 1);
+  IncrementAndWrap(&next_node_index_, 0,
+                   CountBits(config_.node_address_mask) - 1);
 }
 
 void Receiver::BroadcastChannel(int64_t now_micros) {
@@ -114,11 +104,11 @@ void Receiver::BroadcastChannel(int64_t now_micros) {
 
   ConsolePrintF("levantando dispositivos");
 
-  const BroadcastChannelMessage message = BuildBroadcastChannelMessage(config_);
+  const BroadcastChannelMessage message = config_;
   const Span packet = serializer_.Serialize(kMessageBroadcastAddress, message);
   hc12_.Write(packet);
 
-  SetupHc12OrDie(config_.receiver_channel);
+  SetupHc12OrDie(config_.channel);
 }
 
 }  // namespace receiver

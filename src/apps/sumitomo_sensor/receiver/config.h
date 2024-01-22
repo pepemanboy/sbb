@@ -9,11 +9,7 @@ namespace sbb {
 namespace sumitomo_sensor {
 namespace receiver {
 
-struct ReceiverConfig {
-  uint8_t receiver_channel;
-  uint8_t node_addresses[kMaxNumNodes];
-  uint8_t num_nodes;
-};
+using ReceiverConfig = BroadcastChannelMessage;
 
 ReceiverConfig GetConfig();
 
