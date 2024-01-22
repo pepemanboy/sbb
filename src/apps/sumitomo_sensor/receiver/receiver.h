@@ -6,7 +6,6 @@
 #include "apps/sumitomo_sensor/message_definitions.h"
 #include "apps/sumitomo_sensor/receiver/config.h"
 #include "apps/sumitomo_sensor/receiver/hardware.h"
-#include "apps/sumitomo_sensor/receiver/heart_beats.h"
 #include "common/led.h"
 #include "common/message.h"
 #include "common/time_converter.h"
@@ -30,7 +29,6 @@ class Receiver {
   void UpdateLed(int64_t now_micros);
   void PollNode(int64_t now_micros);
   void BroadcastChannel(int64_t now_micros);
-  void PrintAbsentNodes(int64_t now_micros);
 
   const ReceiverConfig config_;
 
