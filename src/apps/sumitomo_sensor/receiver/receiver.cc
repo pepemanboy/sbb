@@ -27,7 +27,11 @@ Receiver::Receiver()
     : config_(GetConfig()),
       hc12_({kHc12TxPin, kHc12RxPin, kHc12SetPin}),
       poll_node_timer_{kPollNodeInterval_micros},
-      channel_broadcast_timer_{kBroadcastChannelInterval_micros} {}
+      channel_broadcast_timer_{kBroadcastChannelInterval_micros} {
+  for (int i = 0; i < SBB_ARRAYSIZE(node_sequences_); ++i) {
+    node_sequences_[i] = -1;
+  }
+}
 
 void Receiver::Setup() {
   ConsoleInit();
@@ -74,7 +78,7 @@ void Receiver::PollNode(int64_t now_micros) {
   const StatusQueryMessage query = {.sequence = sequence};
   const Span packet = serializer_.Serialize(address, query);
   hc12_.Write(packet);
-  SBB_DEBUGF("Querying for node %d", next_node_index_);
+  SBB_DEBUGF("Querying for node[%d] %d", next_node_index_, address);
 
   // Wait for response.
   const Span rx = hc12_.ReadBytesUntil(0);
