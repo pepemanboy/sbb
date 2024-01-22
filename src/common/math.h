@@ -3,12 +3,12 @@
 
 namespace sbb {
 
-void IncrementAndWrap(int *x, int min, int max) {
-  if (++(*x) > max) *x = min;
-}
+void IncrementAndWrap(int *x, int min, int max);
 
-void DecrementAndWrap(int *x, int min, int max) {
-  if (--(*x) < min) *x = max;
+void DecrementAndWrap(int *x, int min, int max);
+
+constexpr int DivideRoundUp(int numerator, int denominator) {
+  return numerator / denominator + ((numerator % denominator) > 0 ? 1 : 0);
 }
 
 }  // namespace sbb

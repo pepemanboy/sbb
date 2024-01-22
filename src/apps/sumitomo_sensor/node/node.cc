@@ -4,7 +4,7 @@
 #include "apps/sumitomo_sensor/message_definitions.h"
 #include "apps/sumitomo_sensor/node/board.h"
 #include "apps/sumitomo_sensor/node/hardware.h"
-#include "common/bits.h"
+#include "common/bit_array.h"
 #include "drivers/clock.h"
 #include "drivers/console.h"
 #include "drivers/debug_arduino.h"
@@ -108,7 +108,7 @@ bool Node::MaybeProcessBroadcastChannelMessage(int64_t now_micros) {
   BroadcastChannelMessage message;
   if (!unpacker_.MaybeFillMessage(&message)) return false;
 
-  if (ReadBit(message.node_address_mask, node_id_)) {
+  if (message.node_address_mask.ReadBit(node_id_)) {
     SetupHc12OrDie(message.channel);
   }
 

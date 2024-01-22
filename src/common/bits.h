@@ -2,6 +2,7 @@
 #define SBB_COMMON_BITS_H
 
 namespace sbb {
+namespace bits {
 
 template <typename T>
 constexpr T SingleBit(int bit) {
@@ -27,7 +28,7 @@ T WriteBits(T bitmask, const int (&bits)[N]) {
 }
 
 template <typename T>
-T CountBits(T bitmask) {
+int CountBits(T bitmask) {
   int n = 0;
   for (int i = 0; i < static_cast<int>(sizeof(T)) * 8; ++i) {
     if (ReadBit<T>(bitmask, i)) ++n;
@@ -47,6 +48,7 @@ int NthSetBitIndex(T bitmask, int n) {
   return -1;
 }
 
+}  // namespace bits
 }  // namespace sbb
 
 #endif  // SBB_COMMON_BITS_H

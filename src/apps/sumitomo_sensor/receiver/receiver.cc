@@ -6,7 +6,7 @@
 #include "apps/sumitomo_sensor/receiver/board.h"
 #include "apps/sumitomo_sensor/receiver/config.h"
 #include "common/array_size.h"
-#include "common/bits.h"
+#include "common/bit_array.h"
 #include "common/math.h"
 #include "drivers/clock.h"
 #include "drivers/console.h"
@@ -74,7 +74,7 @@ void Receiver::PollNode(int64_t now_micros) {
   // Send query to node.
   const uint32_t sequence = node_sequences_[next_node_index_];
   const uint8_t address =
-      NthSetBitIndex(config_.node_address_mask, next_node_index_);
+     config_.node_address_mask.NthSetBitIndex(next_node_index_);
   const StatusQueryMessage query = {.sequence = sequence};
   const Span packet = serializer_.Serialize(address, query);
   hc12_.Write(packet);
@@ -100,7 +100,7 @@ void Receiver::PollNode(int64_t now_micros) {
 
   // Next node.
   IncrementAndWrap(&next_node_index_, 0,
-                   CountBits(config_.node_address_mask) - 1);
+                   config_.node_address_mask.CountBits() - 1);
 }
 
 void Receiver::BroadcastChannel(int64_t now_micros) {
