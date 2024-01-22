@@ -18,7 +18,7 @@ Node::Node()
     : hc12_(Hc12Antenna::Options{kHc12TxPin, kHc12RxPin, kHc12SetPin}) {}
 
 void Node::Setup() {
-  SBB_DEBUG_ENABLE();
+  // SBB_DEBUG_ENABLE();
   HardwareInit();
 
   HardwareLedGreenSet(true);
