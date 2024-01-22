@@ -15,7 +15,7 @@ uint64_t NodeAddressMask(const int (&bits)[N]) {
 }  // namespace
 
 ReceiverConfig GetConfig() {
-  return {.channel = 10, .node_address_mask = NodeAddressMask<2>({10, 11})};
+  return {.channel = 10, .node_address_mask = NodeAddressMask<2>({11, 12})};
 }
 
 }  // namespace receiver
