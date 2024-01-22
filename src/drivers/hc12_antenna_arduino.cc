@@ -1,6 +1,7 @@
 #include "drivers/hc12_antenna_arduino.h"
 
-#include "Arduino.h"
+#include <Arduino.h>
+
 #include "common/span.h"
 #include "common/status.h"
 #include "drivers/debug_arduino.h"

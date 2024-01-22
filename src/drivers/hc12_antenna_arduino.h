@@ -1,7 +1,8 @@
 #ifndef SBB_DRIVERS_HC12_ANTENNA_ARDUINO_H
 #define SBB_DRIVERS_HC12_ANTENNA_ARDUINO_H
 
-#include "SoftwareSerial.h"
+#include <SoftwareSerial.h>
+
 #include "common/span.h"
 #include "common/status.h"
 
