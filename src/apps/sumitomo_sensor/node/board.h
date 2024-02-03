@@ -1,6 +1,8 @@
 #ifndef SBB_SUMITOMO_SENSOR_NODE_BOARD_H
 #define SBB_SUMITOMO_SENSOR_NODE_BOARD_H
 
+#include <Arduino.h>
+
 #include "drivers/gpio.h"
 #include "drivers/dip_switch.h"
 
