@@ -12,6 +12,9 @@ constexpr int kHc12TxPin = 6;
 constexpr int kHc12RxPin = 5;
 constexpr int kHc12SetPin = 4;
 
+constexpr int kPn532TxPin = 2;
+constexpr int kPn532RxPin = 3;
+
 constexpr GpioPin kLedGreen = {
     .mode = GpioMode::kOutput, .polarity = GpioPolarity::kActiveLow, .pin = 9};
 constexpr GpioPin kLedRed = {

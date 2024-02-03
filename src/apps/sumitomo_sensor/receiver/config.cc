@@ -17,7 +17,9 @@ BitArray<128> NodeAddressMask(const int (&bits)[N]) {
 }  // namespace
 
 ReceiverConfig GetConfig() {
-  return {.channel = 10, .node_address_mask = NodeAddressMask({126, 127})};
+  return {.channel = 10,
+          .node_address_mask = NodeAddressMask(
+              {60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73})};
 }
 
 }  // namespace receiver

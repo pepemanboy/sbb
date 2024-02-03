@@ -56,7 +56,7 @@ void Receiver::Poll() {
 }
 
 void Receiver::SetupHc12OrDie(int channel) {
-  if (hc12_.Setup(channel) != Status::kOk) {
+  if (!hc12_.Setup(channel)) {
     HardwareLedSet(false);
     while (1) {
       delay(100);

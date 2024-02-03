@@ -4,7 +4,7 @@
 
 using App = sbb::sumitomo_sensor::node::Node;
 
-App app = {};
+App app = {App::Options{.sensor_type = App::Options::kNfcSensor}};
 
 void setup() { app.Setup(); }
 

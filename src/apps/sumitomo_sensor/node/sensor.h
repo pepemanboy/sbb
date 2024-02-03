@@ -1,5 +1,5 @@
-#ifndef SBB_APPS_SUMITOMO_SENSOR_NODE_IR_SENSOR_H
-#define SBB_APPS_SUMITOMO_SENSOR_NODE_IR_SENSOR_H
+#ifndef SBB_APPS_SUMITOMO_SENSOR_NODE_SENSOR_H
+#define SBB_APPS_SUMITOMO_SENSOR_NODE_SENSOR_H
 
 #include "common/debounce.h"
 #include "common/rising_edge_detector.h"
@@ -8,8 +8,14 @@ namespace sbb {
 namespace sumitomo_sensor {
 namespace node {
 
-class IrSensor {
+class Sensor {
  public:
+  struct Options {
+    int64_t debounce_micros;
+  };
+
+  explicit Sensor(const Options &options): debounce_(options.debounce_micros){}
+
   // Returns true on debounced `reading` rising edge.
   bool Poll(bool reading, int64_t micros) {
     const bool debounced_state = debounce_.Poll(reading, micros);
@@ -27,4 +33,4 @@ class IrSensor {
 }  // namespace sumitomo_sensor
 }  // namespace sbb
 
-#endif  // SBB_APPS_SUMITOMO_SENSOR_NODE_IR_SENSOR_H
+#endif  // SBB_APPS_SUMITOMO_SENSOR_NODE_SENSOR_H

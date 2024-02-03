@@ -5,7 +5,7 @@ namespace sbb {
 namespace sumitomo_sensor {
 namespace node {
 
-void HardwareInit();
+void HardwareInit(bool use_ir_sensor);
 
 void HardwareLedGreenSet(bool state);
 void HardwareLedRedSet(bool state);

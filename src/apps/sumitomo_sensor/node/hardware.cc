@@ -10,7 +10,7 @@ namespace sbb {
 namespace sumitomo_sensor {
 namespace node {
 
-void HardwareInit() {
+void HardwareInit(bool use_ir_sensor) {
   // LEDs.
   GpioConfigure(kLedGreen);
   GpioConfigure(kLedRed);
@@ -21,7 +21,9 @@ void HardwareInit() {
   GpioSet(kLedYellow, false);
 
   // IR sensor.
-  GpioConfigure(kIrSensor);
+  if (use_ir_sensor) {
+    GpioConfigure(kIrSensor);
+  }
 
   // DIP switch.
   DipSwitchConfigure(kDipSwitch);

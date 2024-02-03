@@ -1,9 +1,9 @@
-#include "apps/sumitomo_sensor/node/node.h"
-
 #include "apps/sumitomo_sensor/event.h"
 #include "apps/sumitomo_sensor/message_definitions.h"
 #include "apps/sumitomo_sensor/node/board.h"
 #include "apps/sumitomo_sensor/node/hardware.h"
+#include "apps/sumitomo_sensor/node/node.h"
+#include "apps/sumitomo_sensor/node/sensor.h"
 #include "common/bit_array.h"
 #include "drivers/clock.h"
 #include "drivers/console.h"
@@ -13,16 +13,35 @@
 namespace sbb {
 namespace sumitomo_sensor {
 namespace node {
+namespace {
 
-Node::Node()
-    : hc12_(Hc12Antenna::Options{kHc12TxPin, kHc12RxPin, kHc12SetPin}) {}
+Sensor::Options GetSensorOptions(Node::Options::SensorType sensor_type) {
+  switch (sensor_type) {
+    case Node::Options::SensorType::kIrSensor:
+      return {.debounce_micros = 5 * 1000 * 1000};
+    case Node::Options::SensorType::kNfcSensor:
+      return {.debounce_micros = 500 * 1000};
+  }
+}
+
+}  // namespace
+
+Node::Node(const Options &options)
+    : options_(options),
+      sensor_(GetSensorOptions(options_.sensor_type)),
+      hc12_(Hc12Antenna::Options{kHc12TxPin, kHc12RxPin, kHc12SetPin}),
+      nfc_(Pn532Nfc::Options{kPn532TxPin, kHc12RxPin}) {}
 
 void Node::Setup() {
   SBB_DEBUG_ENABLE();
-  HardwareInit();
+  HardwareInit(options_.sensor_type == Options::SensorType::kIrSensor);
 
   HardwareLedGreenSet(true);
   SetupHc12OrDie(kDefaultChannel);
+
+  if (options_.sensor_type == Options::SensorType::kNfcSensor) {
+    SetupNfcOrDie();
+  }
 
   // Read DIP switch to configure node ID.
   node_id_ = HardwareDipSwitchGet();
@@ -34,16 +53,28 @@ void Node::Poll() {
   const int64_t now_micros = time_.Update(ClockMicros());
 
   UpdateLeds(now_micros);
-  ReadIrSensor(now_micros);
+  ReadSensor(now_micros);
   HandleMessages(now_micros);
 
   // Throttle main loop.
   delay(10);
 }
 
-void Node::SetupHc12OrDie(int channel) {
-  if (hc12_.Setup(channel) != Status::kOk) {
+void Node::SetupNfcOrDie() {
+  if (!nfc_.Setup()) {
     HardwareLedGreenSet(false);
+    HardwareLedYellowSet(true);
+    HardwareLedRedSet(true);
+    while (1) {
+      delay(100);
+    }
+  }
+}
+
+void Node::SetupHc12OrDie(int channel) {
+  if (!hc12_.Setup(channel)) {
+    HardwareLedGreenSet(false);
+    HardwareLedYellowSet(false);
     HardwareLedRedSet(true);
     while (1) {
       delay(100);
@@ -59,11 +90,20 @@ void Node::UpdateLeds(int64_t now_micros) {
   HardwareLedRedSet(led_red_.Poll(now_micros));
 }
 
-void Node::ReadIrSensor(int64_t now_micros) {
+bool Node::GetSensorRawReading() {
+  switch (options_.sensor_type) {
+    case Options::SensorType::kIrSensor:
+      return HardwareIrSensorGet();
+    case Options::SensorType::kNfcSensor:
+      return nfc_.IsCardPresent();
+  }
+}
+
+void Node::ReadSensor(int64_t now_micros) {
   const bool rising_edge_detected =
-      ir_sensor_.Poll(HardwareIrSensorGet(), now_micros);
-  led_yellow_.Control(ir_sensor_.debounced_state() ? Led::Command::kOn
-                                                   : Led::Command::kOff);
+      sensor_.Poll(GetSensorRawReading(), now_micros);
+  led_yellow_.Control(sensor_.debounced_state() ? Led::Command::kOn
+                                                : Led::Command::kOff);
 
   if (rising_edge_detected) {
     events_.PushAndMaybeEvict(

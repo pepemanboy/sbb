@@ -4,7 +4,6 @@
 #include <SoftwareSerial.h>
 
 #include "common/span.h"
-#include "common/status.h"
 
 namespace sbb {
 
@@ -17,19 +16,19 @@ class Hc12Antenna {
   };
 
   explicit Hc12Antenna(const Options& options)
-      : options_(options), hc12_serial_(options_.rx_pin, options_.tx_pin){};
+      : options_(options), serial_(options_.rx_pin, options_.tx_pin){}
 
-  Status Setup(int channel);
+  bool Setup(int channel);
   void Write(Span message);
   bool IsReadAvailable();
   Span ReadBytesUntil(char character);
 
  private:
-  Status ConfigureParameter(char* query);
-  Status SetupOneTime(int channel);
+  bool ConfigureParameter(char* query);
+  bool SetupOneTime(int channel);
 
   Options options_;
-  SoftwareSerial hc12_serial_;
+  SoftwareSerial serial_;
 
   uint8_t rx_buffer_[50];
   int rx_buffer_length_ = 0;
