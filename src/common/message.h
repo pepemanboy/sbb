@@ -21,9 +21,9 @@ class MessageSerializer {
     pktUpdate(&packet_, reinterpret_cast<const uint8_t *>(&message),
               sizeof(Message));
     pktRefresh(&packet_);
-    int len = sizeof(buffer_);
+    size_t len = sizeof(buffer_);
     pktSerialize(&packet_, buffer_, &len);
-    return {buffer_, len};
+    return {buffer_, static_cast<int>(len)};
   }
 
  private:

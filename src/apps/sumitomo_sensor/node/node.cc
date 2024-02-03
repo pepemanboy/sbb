@@ -21,6 +21,8 @@ Sensor::Options GetSensorOptions(Node::Options::SensorType sensor_type) {
       return {.debounce_micros = 5000000};
     case Node::Options::SensorType::kNfcSensor:
       return {.debounce_micros = 500000};
+    default:
+      return {};
   }
 }
 
@@ -96,6 +98,8 @@ bool Node::GetSensorRawReading() {
       return HardwareIrSensorGet();
     case Options::SensorType::kNfcSensor:
       return nfc_.IsCardPresent();
+    default:
+      return false;
   }
 }
 
