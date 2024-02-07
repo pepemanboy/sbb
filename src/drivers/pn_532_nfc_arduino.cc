@@ -19,7 +19,12 @@ Pn532Nfc::Pn532Nfc(const Options &options)
 bool Pn532Nfc::Setup() {
   nfc_.begin();
   const uint32_t versionData = nfc_.getFirmwareVersion();
-  return versionData != 0 && nfc_.SAMConfig();
+  if (versionData == 0) {
+    return false;
+  }
+
+  nfc_.SAMConfig();
+  return true;
 }
 
 bool Pn532Nfc::ReadCard(Card &card) {
