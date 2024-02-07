@@ -18,9 +18,9 @@ namespace {
 Sensor::Options GetSensorOptions(Node::Options::SensorType sensor_type) {
   switch (sensor_type) {
     case Node::Options::SensorType::kIrSensor:
-      return {.debounce_micros = 5000000};
-    case Node::Options::SensorType::kNfcSensor:
       return {.debounce_micros = 500000};
+    case Node::Options::SensorType::kNfcSensor:
+      return {.debounce_micros = 5000000};
     default:
       return {};
   }
