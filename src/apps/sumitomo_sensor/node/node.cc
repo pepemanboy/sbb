@@ -35,7 +35,7 @@ Node::Node(const Options &options)
       nfc_(Pn532Nfc::Options{kPn532TxPin, kHc12RxPin}) {}
 
 void Node::Setup() {
-  SBB_DEBUG_ENABLE();
+  // SBB_DEBUG_ENABLE();
   HardwareInit(options_.sensor_type == Options::SensorType::kIrSensor);
 
   HardwareLedGreenSet(true);

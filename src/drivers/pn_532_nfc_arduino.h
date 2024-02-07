@@ -2,8 +2,7 @@
 #define SBB_DRIVERS_PN_532_NFC_ARDUINO_H
 
 #include <PN532.h>
-#include <PN532_SWHSU.h>
-#include <SoftwareSerial.h>
+#include <PN532_HSU.h>
 
 namespace sbb {
 
@@ -28,8 +27,7 @@ class Pn532Nfc {
  private:
   const Options options_;
 
-  SoftwareSerial serial_;
-  PN532_SWHSU hsu_;
+  PN532_HSU hsu_;
   PN532 nfc_;
 };
 

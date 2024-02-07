@@ -1,7 +1,6 @@
 #include "drivers/pn_532_nfc_arduino.h"
 //
 #include <Arduino.h>
-#include <SoftwareSerial.h>
 
 #include "common/array_size.h"
 
@@ -14,8 +13,7 @@ constexpr int kReadTimeout_ms = 250;
 
 Pn532Nfc::Pn532Nfc(const Options &options)
     : options_(options),
-      serial_(options_.rx_pin, options_.tx_pin),
-      hsu_(serial_),
+      hsu_(Serial),
       nfc_(hsu_) {}
 
 bool Pn532Nfc::Setup() {
