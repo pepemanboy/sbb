@@ -17,7 +17,7 @@ class Debounce {
  private:
   int64_t debounce_micros_;  // Init in constructor.
   bool debounced_state_ = false;
-  int64_t last_state_change_micros_ = 0;
+  int64_t last_on_micros_ = 0;
 };
 
 }  // namespace sbb
