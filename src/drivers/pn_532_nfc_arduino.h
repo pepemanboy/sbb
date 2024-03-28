@@ -11,8 +11,6 @@ namespace sbb {
 class Pn532Nfc {
  public:
   struct Options {
-    int tx_pin;
-    int rx_pin;
     HardwareSerial &serial;
   };
 

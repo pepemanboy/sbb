@@ -1,22 +1,21 @@
-#ifndef SBB_DRIVERS_HC12_ANTENNA_ARDUINO_H
-#define SBB_DRIVERS_HC12_ANTENNA_ARDUINO_H
+#ifndef SBB_DRIVERS_HC12_ANTENNA_HW_ARDUINO_H
+#define SBB_DRIVERS_HC12_ANTENNA_HW_ARDUINO_H
 
-#include <SoftwareSerial.h>
+#include <Arduino.h>
 
 #include "common/span.h"
 
 namespace sbb {
 
-class Hc12Antenna {
+class Hc12AntennaHw {
  public:
   struct Options {
-    int tx_pin;
-    int rx_pin;
+    HardwareSerial &serial;
     int set_pin;
   };
 
-  explicit Hc12Antenna(const Options& options)
-      : options_(options), serial_(options_.rx_pin, options_.tx_pin){}
+  explicit Hc12AntennaHw(const Options& options)
+      : options_(options), serial_(options_.serial){}
 
   bool Setup(int channel);
   void Write(Span message);
@@ -28,7 +27,7 @@ class Hc12Antenna {
   bool SetupOneTime(int channel);
 
   Options options_;
-  SoftwareSerial serial_;
+  HardwareSerial serial_;
 
   uint8_t rx_buffer_[50];
   int rx_buffer_length_ = 0;
@@ -38,4 +37,4 @@ class Hc12Antenna {
 
 }  // namespace sbb
 
-#endif  // SBB_DRIVERS_HC12_ANTENNA_ARDUINO_H
+#endif  // SBB_DRIVERS_HC12_ANTENNA_HW_ARDUINO_H

@@ -10,7 +10,7 @@
 #include "drivers/clock.h"
 #include "drivers/console.h"
 #include "drivers/debug_arduino.h"
-#include "drivers/hc12_antenna_arduino.h"
+#include "drivers/hc12_antenna_hw_arduino.h"
 
 namespace sbb {
 namespace sumitomo_sensor {
@@ -25,8 +25,8 @@ Sensor::Options GetSensorOptions() {
 
 Node::Node()
     : sensor_(GetSensorOptions()),
-      hc12_(Hc12Antenna::Options{kHc12TxPin, kHc12RxPin, kHc12SetPin}),
-      nfc_(Pn532Nfc::Options{kPn532TxPin, kHc12RxPin, Serial1}) {}
+      hc12_(Hc12Antenna::Options{Serial1, kHc12SetPin}),
+      nfc_(Pn532Nfc::Options{Serial3}) {}
 
 void Node::Setup() {
   // SBB_DEBUG_ENABLE();
