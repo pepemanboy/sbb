@@ -13,7 +13,7 @@ constexpr int kReadTimeout_ms = 250;
 
 Pn532Nfc::Pn532Nfc(const Options &options)
     : options_(options),
-      hsu_(Serial),
+      hsu_(options_.serial),
       nfc_(hsu_) {}
 
 bool Pn532Nfc::Setup() {

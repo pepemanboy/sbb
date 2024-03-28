@@ -2,10 +2,10 @@
 
 #include "apps/sumitomo_sensor/event.h"
 #include "apps/sumitomo_sensor/message_definitions.h"
-#include "apps/sumitomo_sensor/node/board.h"
-#include "apps/sumitomo_sensor/node/hardware.h"
-#include "apps/sumitomo_sensor/node/node.h"
-#include "apps/sumitomo_sensor/node/sensor.h"
+#include "apps/sumitomo_sensor/node_v2/board.h"
+#include "apps/sumitomo_sensor/node_v2/hardware.h"
+#include "apps/sumitomo_sensor/node_v2/node.h"
+#include "apps/sumitomo_sensor/node_v2/sensor.h"
 #include "common/bit_array.h"
 #include "drivers/clock.h"
 #include "drivers/console.h"
@@ -14,38 +14,28 @@
 
 namespace sbb {
 namespace sumitomo_sensor {
-namespace node {
+namespace node_v2 {
 namespace {
 
-Sensor::Options GetSensorOptions(Node::Options::SensorType sensor_type) {
-  switch (sensor_type) {
-    case Node::Options::SensorType::kIrSensor:
-      return {.debounce_micros = 500000};
-    case Node::Options::SensorType::kNfcSensor:
-      return {.debounce_micros = 5000000};
-    default:
-      return {};
-  }
+Sensor::Options GetSensorOptions() {
+  return {.debounce_micros = 5000000};
 }
 
 }  // namespace
 
-Node::Node(const Options &options)
-    : options_(options),
-      sensor_(GetSensorOptions(options_.sensor_type)),
+Node::Node()
+    : sensor_(GetSensorOptions()),
       hc12_(Hc12Antenna::Options{kHc12TxPin, kHc12RxPin, kHc12SetPin}),
-      nfc_(Pn532Nfc::Options{kPn532TxPin, kHc12RxPin, Serial}) {}
+      nfc_(Pn532Nfc::Options{kPn532TxPin, kHc12RxPin, Serial1}) {}
 
 void Node::Setup() {
   // SBB_DEBUG_ENABLE();
-  HardwareInit(options_.sensor_type == Options::SensorType::kIrSensor);
+  HardwareInit();
 
   HardwareLedGreenSet(true);
   SetupHc12OrDie(kDefaultChannel);
 
-  if (options_.sensor_type == Options::SensorType::kNfcSensor) {
-    SetupNfcOrDie();
-  }
+  SetupNfcOrDie();
 
   // Read DIP switch to configure node ID.
   node_id_ = HardwareDipSwitchGet();
@@ -95,14 +85,7 @@ void Node::UpdateLeds(int64_t now_micros) {
 }
 
 bool Node::GetSensorRawReading() {
-  switch (options_.sensor_type) {
-    case Options::SensorType::kIrSensor:
-      return HardwareIrSensorGet();
-    case Options::SensorType::kNfcSensor:
-      return nfc_.IsCardPresent();
-    default:
-      return false;
-  }
+  return nfc_.IsCardPresent();
 }
 
 void Node::ReadSensor(int64_t now_micros) {
@@ -161,6 +144,6 @@ bool Node::MaybeProcessBroadcastChannelMessage(int64_t now_micros) {
   return true;
 }
 
-}  // namespace node
+}  // namespace node_v2
 }  // namespace sumitomo_sensor
 }  // namespace sbb
