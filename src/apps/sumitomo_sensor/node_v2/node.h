@@ -10,7 +10,7 @@
 #include "common/message.h"
 #include "common/time_converter.h"
 #include "drivers/hc12_antenna_hw_arduino.h"
-#include "drivers/pn_532_nfc_arduino.h"
+#include "drivers/pn_532_nfc_sw_arduino.h"
 
 namespace sbb {
 namespace sumitomo_sensor {
@@ -47,7 +47,7 @@ class Node {
   TimeConverter time_;
   Hc12AntennaHw hc12_;
 
-  Pn532Nfc nfc_;
+  Pn532NfcSw nfc_;
 
   CircularBuffer<Event, 20> events_ = {};
 

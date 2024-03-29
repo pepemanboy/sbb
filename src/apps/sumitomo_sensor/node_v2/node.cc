@@ -26,7 +26,7 @@ Sensor::Options GetSensorOptions() {
 Node::Node()
     : sensor_(GetSensorOptions()),
       hc12_(Hc12AntennaHw::Options{Serial1, kHc12SetPin}),
-      nfc_(Pn532Nfc::Options{Serial3}) {}
+      nfc_(Pn532NfcSw::Options{kPn532RxPin, kPn532TxPin}) {}
 
 void Node::Setup() {
   SBB_DEBUG_ENABLE();
