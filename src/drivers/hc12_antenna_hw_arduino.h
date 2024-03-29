@@ -27,7 +27,7 @@ class Hc12AntennaHw {
   bool SetupOneTime(int channel);
 
   Options options_;
-  HardwareSerial serial_;
+  HardwareSerial &serial_;
 
   uint8_t rx_buffer_[50];
   int rx_buffer_length_ = 0;

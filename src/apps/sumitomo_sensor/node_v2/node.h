@@ -9,7 +9,7 @@
 #include "common/led.h"
 #include "common/message.h"
 #include "common/time_converter.h"
-#include "drivers/hc12_antenna_arduino.h"
+#include "drivers/hc12_antenna_hw_arduino.h"
 #include "drivers/pn_532_nfc_arduino.h"
 
 namespace sbb {
@@ -45,7 +45,7 @@ class Node {
   uint8_t node_id_ = 0;
 
   TimeConverter time_;
-  Hc12Antenna hc12_;
+  Hc12AntennaHw hc12_;
 
   Pn532Nfc nfc_;
 
