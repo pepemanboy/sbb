@@ -10,12 +10,12 @@ namespace sbb {
 namespace sumitomo_sensor {
 namespace node_v2 {
 
-constexpr int kHc12TxPin = 19;
-constexpr int kHc12RxPin = 18;
+constexpr HardwareSerial *kHc12Serial = &Serial1;
 constexpr int kHc12SetPin = 20;
 
-constexpr int kPn532TxPin = 15;
-constexpr int kPn532RxPin = 14;
+// v2.0 PCB has PN532 connected incorrectly to Serial3 (TX to TX and RX to RX), 
+// but it needs to be reworked to re-route pins to Serial2.
+constexpr HardwareSerial *kPn532Serial = &Serial2;
 
 constexpr GpioPin kLedGreen = {
     .mode = GpioMode::kOutput, .polarity = GpioPolarity::kActiveLow, .pin = A3};

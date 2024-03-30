@@ -3,6 +3,7 @@
 #include <Arduino.h>
 
 #include "common/array_size.h"
+#include "drivers/debug_arduino.h"
 
 namespace sbb {
 namespace {
@@ -20,10 +21,12 @@ bool Pn532Nfc::Setup() {
   nfc_.begin();
   const uint32_t versionData = nfc_.getFirmwareVersion();
   if (versionData == 0) {
+    SBB_DEBUGF("Could not read PN532 version");
     return false;
   }
 
   nfc_.SAMConfig();
+  SBB_DEBUGF("PN532 setup complete");
   return true;
 }
 

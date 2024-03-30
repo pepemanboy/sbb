@@ -25,8 +25,8 @@ Sensor::Options GetSensorOptions() {
 
 Node::Node()
     : sensor_(GetSensorOptions()),
-      hc12_(Hc12AntennaHw::Options{Serial1, kHc12SetPin}),
-      nfc_(Pn532NfcSw::Options{kPn532RxPin, kPn532TxPin}) {}
+      hc12_(Hc12AntennaHw::Options{*kHc12Serial, kHc12SetPin}),
+      nfc_(Pn532Nfc::Options{*kPn532Serial}) {}
 
 void Node::Setup() {
   SBB_DEBUG_ENABLE();
@@ -97,6 +97,7 @@ void Node::ReadSensor(int64_t now_micros) {
   if (rising_edge_detected) {
     events_.PushAndMaybeEvict(
         {.micros = now_micros, .sequence = ++event_sequence_});
+    SBB_DEBUGF("Card detected");
   }
 }
 
