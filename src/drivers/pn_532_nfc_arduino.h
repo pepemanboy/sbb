@@ -21,6 +21,7 @@ class Pn532Nfc {
 
   explicit Pn532Nfc(const Options &options);
 
+  bool SetupOneTime();
   bool Setup();
   bool ReadCard(Card &card);
   bool IsCardPresent();

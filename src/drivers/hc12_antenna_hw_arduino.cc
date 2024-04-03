@@ -41,6 +41,7 @@ bool Hc12AntennaHw::Setup(int channel) {
       return false;
     } else {
       SBB_DEBUG(F("Retrying"));
+      delay(1000);
     }
   }
   return true;
