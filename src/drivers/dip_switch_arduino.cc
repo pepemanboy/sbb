@@ -6,7 +6,7 @@ namespace sbb {
 
 void DipSwitchConfigure(const DipSwitchPins &dip) {
   for (int pin : dip.pins) {
-    pinMode(pin, INPUT);
+    pinMode(pin, INPUT_PULLUP);
   }
 }
 

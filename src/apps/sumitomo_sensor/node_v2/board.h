@@ -36,10 +36,8 @@ constexpr DipSwitchPins kDipSwitch = {
             A11,
             A12,
             A13,
-            A14,
-            A15
         },
-    .number_of_pins = 10,
+    .number_of_pins = 8,
 };
 
 }  // namespace node_v2
