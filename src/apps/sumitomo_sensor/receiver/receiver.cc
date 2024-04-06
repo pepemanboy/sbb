@@ -34,7 +34,7 @@ Receiver::Receiver()
 }
 
 void Receiver::Setup() {
-  // SBB_DEBUG_ENABLE();
+  SBB_DEBUG_ENABLE();
   ConsoleInit();
   HardwareInit();
 }
