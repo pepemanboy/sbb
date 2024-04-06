@@ -19,7 +19,7 @@ namespace receiver {
 namespace {
 
 constexpr int64_t kPollNodeInterval_micros = 3000000;           // 3s
-constexpr int64_t kBroadcastChannelInterval_micros = 30000000;  // 30s
+constexpr int64_t kSetupInterval_micros = 31000000;  // 31s
 
 }  // namespace
 
@@ -27,18 +27,16 @@ Receiver::Receiver()
     : config_(GetConfig()),
       hc12_({kHc12TxPin, kHc12RxPin, kHc12SetPin}),
       poll_node_timer_{kPollNodeInterval_micros},
-      channel_broadcast_timer_{kBroadcastChannelInterval_micros} {
+      setup_timer_(kSetupInterval_micros) {
   for (int i = 0; i < SBB_ARRAYSIZE(node_sequences_); ++i) {
     node_sequences_[i] = -1;
   }
 }
 
 void Receiver::Setup() {
-  ConsoleInit();
   // SBB_DEBUG_ENABLE();
-
+  ConsoleInit();
   HardwareInit();
-  led_.Control(Led::Command::kOn);
 }
 
 void Receiver::Poll() {
@@ -46,8 +44,8 @@ void Receiver::Poll() {
 
   UpdateLed(now_micros);
 
-  if (channel_broadcast_timer_.Poll(now_micros)) {
-    BroadcastChannel(now_micros);
+  if (setup_timer_.Poll(now_micros)) {
+    SetupHc12OrDie(kReceiverNodeComboChannel);
   }
 
   if (poll_node_timer_.Poll(now_micros)) {
@@ -56,6 +54,7 @@ void Receiver::Poll() {
 }
 
 void Receiver::SetupHc12OrDie(int channel) {
+  HardwareLedSet(true);
   if (!hc12_.Setup(channel)) {
     HardwareLedSet(false);
     while (1) {
@@ -101,18 +100,6 @@ void Receiver::PollNode(int64_t now_micros) {
   // Next node.
   IncrementAndWrap(&next_node_index_, 0,
                    config_.node_address_mask.CountBits() - 1);
-}
-
-void Receiver::BroadcastChannel(int64_t now_micros) {
-  SetupHc12OrDie(kDefaultChannel);
-
-  ConsolePrintF("levantando dispositivos");
-
-  const BroadcastChannelMessage message = config_;
-  const Span packet = serializer_.Serialize(kMessageBroadcastAddress, message);
-  hc12_.Write(packet);
-
-  SetupHc12OrDie(config_.channel);
 }
 
 }  // namespace receiver

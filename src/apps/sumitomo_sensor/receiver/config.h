@@ -3,13 +3,16 @@
 
 #include <stdint.h>
 
+#include "common/bit_array.h"
 #include "apps/sumitomo_sensor/message_definitions.h"
 
 namespace sbb {
 namespace sumitomo_sensor {
 namespace receiver {
 
-using ReceiverConfig = BroadcastChannelMessage;
+struct ReceiverConfig {
+  BitArray<kMaxNumNodes> node_address_mask;
+};
 
 ReceiverConfig GetConfig();
 

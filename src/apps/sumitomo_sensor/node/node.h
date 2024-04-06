@@ -8,6 +8,7 @@
 #include "common/debounce.h"
 #include "common/led.h"
 #include "common/message.h"
+#include "common/timer.h"
 #include "common/time_converter.h"
 #include "drivers/hc12_antenna_arduino.h"
 #include "drivers/pn_532_nfc_arduino.h"
@@ -42,7 +43,6 @@ class Node {
   void HandleMessages(int64_t now_micros);
 
   bool MaybeProcessStatusQueryMessage(int64_t now_micros);
-  bool MaybeProcessBroadcastChannelMessage(int64_t now_micros);
 
   const Options options_;
 
@@ -65,6 +65,8 @@ class Node {
   MessageUnpacker unpacker_;
 
   uint32_t event_sequence_ = 0;
+  
+  Timer setup_timer_;
 };
 
 }  // namespace node

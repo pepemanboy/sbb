@@ -17,6 +17,8 @@ namespace sumitomo_sensor {
 namespace node {
 namespace {
 
+constexpr int64_t kSetupInterval_micros = 61000000;  // 61s
+
 Sensor::Options GetSensorOptions(Node::Options::SensorType sensor_type) {
   switch (sensor_type) {
     case Node::Options::SensorType::kIrSensor:
@@ -34,14 +36,12 @@ Node::Node(const Options &options)
     : options_(options),
       sensor_(GetSensorOptions(options_.sensor_type)),
       hc12_(Hc12Antenna::Options{kHc12TxPin, kHc12RxPin, kHc12SetPin}),
-      nfc_(Pn532Nfc::Options{Serial}) {}
+      nfc_(Pn532Nfc::Options{Serial}),
+      setup_timer_(kSetupInterval_micros) {}
 
 void Node::Setup() {
   // SBB_DEBUG_ENABLE();
   HardwareInit(options_.sensor_type == Options::SensorType::kIrSensor);
-
-  HardwareLedGreenSet(true);
-  SetupHc12OrDie(kDefaultChannel);
 
   if (options_.sensor_type == Options::SensorType::kNfcSensor) {
     SetupNfcOrDie();
@@ -57,6 +57,11 @@ void Node::Poll() {
   const int64_t now_micros = time_.Update(ClockMicros());
 
   UpdateLeds(now_micros);
+
+  if (setup_timer_.Poll(now_micros)) {
+    SetupHc12OrDie(kReceiverNodeComboChannel);
+  }
+
   ReadSensor(now_micros);
   HandleMessages(now_micros);
 
@@ -65,6 +70,7 @@ void Node::Poll() {
 }
 
 void Node::SetupNfcOrDie() {
+  HardwareLedGreenSet(true);
   if (!nfc_.Setup()) {
     HardwareLedGreenSet(false);
     HardwareLedYellowSet(true);
@@ -76,6 +82,7 @@ void Node::SetupNfcOrDie() {
 }
 
 void Node::SetupHc12OrDie(int channel) {
+  HardwareLedGreenSet(true);
   if (!hc12_.Setup(channel)) {
     HardwareLedGreenSet(false);
     HardwareLedYellowSet(false);
@@ -123,7 +130,6 @@ void Node::HandleMessages(int64_t now_micros) {
   const Span rx = hc12_.ReadBytesUntil(0);
   if (unpacker_.Unpack(rx.buffer, rx.length)) {
     if (MaybeProcessStatusQueryMessage(now_micros)) return;
-    if (MaybeProcessBroadcastChannelMessage(now_micros)) return;
   }
 }
 
@@ -147,17 +153,6 @@ bool Node::MaybeProcessStatusQueryMessage(int64_t now_micros) {
 
   const Span packet = serializer_.Serialize(kReceiverAddress, status);
   hc12_.Write(packet);
-  return true;
-}
-
-bool Node::MaybeProcessBroadcastChannelMessage(int64_t now_micros) {
-  BroadcastChannelMessage message;
-  if (!unpacker_.MaybeFillMessage(&message)) return false;
-
-  if (message.node_address_mask.ReadBit(node_id_)) {
-    SetupHc12OrDie(message.channel);
-  }
-
   return true;
 }
 

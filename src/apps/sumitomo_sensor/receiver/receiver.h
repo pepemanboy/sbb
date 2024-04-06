@@ -28,7 +28,6 @@ class Receiver {
 
   void UpdateLed(int64_t now_micros);
   void PollNode(int64_t now_micros);
-  void BroadcastChannel(int64_t now_micros);
 
   const ReceiverConfig config_;
 
@@ -44,7 +43,7 @@ class Receiver {
   int next_node_index_ = 0;
   uint32_t node_sequences_[kMaxNumNodes] = {};
 
-  Timer channel_broadcast_timer_;
+  Timer setup_timer_;
 };
 
 }  // namespace receiver

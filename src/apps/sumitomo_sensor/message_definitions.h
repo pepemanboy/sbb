@@ -10,7 +10,9 @@
 namespace sbb {
 namespace sumitomo_sensor {
 
-constexpr int kDefaultChannel = 1;
+// Every receiver - nodes combo should have a unique channel.
+constexpr int kReceiverNodeComboChannel = 31;
+
 constexpr int kReceiverAddress = 0;
 constexpr int kMaxNumNodes = 128;
 
@@ -26,13 +28,6 @@ struct StatusResponseMessage {
   int64_t micros;
   bool has_event;
   Event event;
-};
-
-struct BroadcastChannelMessage {
-  static constexpr int kId = 3;
-
-  uint8_t channel;
-  BitArray<128> node_address_mask;
 };
 
 }  // namespace sumitomo_sensor
