@@ -90,7 +90,8 @@ void Receiver::PollNode(int64_t now_micros) {
       if (response.has_event) {
         const int32_t millis_age =
             (response.micros - response.event.micros) / 1000;
-        ConsolePrintF("pulso en dispositivo %d, hace %ld milisegundos", address,
+        ConsolePrintF("pulso en dispositivo %06d, hace %ld milisegundos", 
+                      FormatAddress(address),
                       millis_age);
         node_sequences_[next_node_index_] = response.event.sequence;
       }
@@ -100,6 +101,10 @@ void Receiver::PollNode(int64_t now_micros) {
   // Next node.
   IncrementAndWrap(&next_node_index_, 0,
                    config_.node_address_mask.CountBits() - 1);
+}
+
+int Receiver::FormatAddress(uint8_t address) {
+  return kReceiverNodeComboChannel * 1000 + address;
 }
 
 }  // namespace receiver
