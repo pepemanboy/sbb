@@ -77,12 +77,12 @@ void Receiver::PollNode(int64_t now_micros) {
   const StatusQueryMessage query = {.sequence = sequence};
   const Span packet = serializer_.Serialize(address, query);
   hc12_.Write(packet);
-  SBB_DEBUGF("Querying for node[%d] %d", next_node_index_, address);
+  SBB_DEBUGF("Querying for node[%d] %06d", next_node_index_, FormatAddress(address));
 
   // Wait for response.
   const Span rx = hc12_.ReadBytesUntil(0);
   if (rx.length > 0) {
-    ConsolePrintF("dispositivo %d ok", address);
+    ConsolePrintF("dispositivo %06d ok", FormatAddress(address));
 
     StatusResponseMessage response;
     if (unpacker_.Unpack(rx.buffer, rx.length) &&
