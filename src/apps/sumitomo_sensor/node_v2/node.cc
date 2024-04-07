@@ -32,7 +32,7 @@ Node::Node()
       setup_timer_(kSetupInterval_micros) {}
 
 void Node::Setup() {
-  SBB_DEBUG_ENABLE();
+  // SBB_DEBUG_ENABLE();
   HardwareInit();
 
   SetupNfcOrDie();
