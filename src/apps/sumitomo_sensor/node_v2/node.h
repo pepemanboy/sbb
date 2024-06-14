@@ -26,7 +26,6 @@ class Node {
 
  private:
   void SetupHc12OrDie(int channel);
-  void SetupNfcOrDie();
 
   bool GetSensorRawReading();
 
@@ -46,8 +45,6 @@ class Node {
 
   TimeConverter time_;
   Hc12AntennaHw hc12_;
-
-  Pn532Nfc nfc_;
 
   CircularBuffer<Event, 20> events_ = {};
 

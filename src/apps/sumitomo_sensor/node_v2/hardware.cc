@@ -22,6 +22,9 @@ void HardwareInit() {
 
   // DIP switch.
   DipSwitchConfigure(kDipSwitch);
+
+  // Inductive sensor.
+  GpioConfigure(kInductiveSensor);
 }
 
 void HardwareLedGreenSet(bool state) { GpioSet(kLedGreen, state); }
@@ -31,6 +34,8 @@ void HardwareLedRedSet(bool state) { GpioSet(kLedRed, state); }
 void HardwareLedYellowSet(bool state) { GpioSet(kLedYellow, state); }
 
 int HardwareDipSwitchGet() { return DipSwitchGet(kDipSwitch); }
+
+bool HardwareGetInductiveSensor() { return GpioGet(kInductiveSensor); }
 
 }  // namespace node_v2
 }  // namespace sumitomo_sensor

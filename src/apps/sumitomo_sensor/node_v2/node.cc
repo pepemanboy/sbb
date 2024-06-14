@@ -28,14 +28,11 @@ Sensor::Options GetSensorOptions() {
 Node::Node()
     : sensor_(GetSensorOptions()),
       hc12_(Hc12AntennaHw::Options{*kHc12Serial, kHc12SetPin}),
-      nfc_(Pn532Nfc::Options{*kPn532Serial}),
       setup_timer_(kSetupInterval_micros) {}
 
 void Node::Setup() {
   // SBB_DEBUG_ENABLE();
   HardwareInit();
-
-  SetupNfcOrDie();
 
   // Read DIP switch to configure node ID.
   node_id_ = HardwareDipSwitchGet();
@@ -59,18 +56,6 @@ void Node::Poll() {
   delay(10);
 }
 
-void Node::SetupNfcOrDie() {
-  HardwareLedGreenSet(true);
-  if (!nfc_.Setup()) {
-    HardwareLedGreenSet(false);
-    HardwareLedYellowSet(true);
-    HardwareLedRedSet(true);
-    while (1) {
-      delay(100);
-    }
-  }
-}
-
 void Node::SetupHc12OrDie(int channel) {
   HardwareLedGreenSet(true);
   if (!hc12_.Setup(channel)) {
@@ -92,7 +77,7 @@ void Node::UpdateLeds(int64_t now_micros) {
 }
 
 bool Node::GetSensorRawReading() {
-  return nfc_.IsCardPresent();
+  return HardwareGetInductiveSensor();
 }
 
 void Node::ReadSensor(int64_t now_micros) {
