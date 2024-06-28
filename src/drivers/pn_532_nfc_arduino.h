@@ -2,7 +2,6 @@
 #define SBB_DRIVERS_PN_532_NFC_ARDUINO_H
 
 #include <Arduino.h>
-
 #include <PN532.h>
 #include <PN532_HSU.h>
 

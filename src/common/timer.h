@@ -8,8 +8,8 @@
 namespace sbb {
 
 class Timer {
-public:
-  explicit Timer(int64_t period_micros): period_micros_(period_micros) {}
+ public:
+  explicit Timer(int64_t period_micros) : period_micros_(period_micros) {}
 
   bool Poll(int64_t micros) {
     if (!next_trigger_micros_.valid) {
@@ -24,11 +24,11 @@ public:
     return false;
   }
 
-private:
+ private:
   const int64_t period_micros_;
   MaybeValid<int64_t> next_trigger_micros_;
 };
 
-}
+}  // namespace sbb
 
 #endif  // SBB_COMMON_TIMER_H

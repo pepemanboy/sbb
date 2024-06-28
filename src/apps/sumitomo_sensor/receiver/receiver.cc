@@ -18,8 +18,8 @@ namespace sumitomo_sensor {
 namespace receiver {
 namespace {
 
-constexpr int64_t kPollNodeInterval_micros = 3000000;           // 3s
-constexpr int64_t kSetupInterval_micros = 31000000;  // 31s
+constexpr int64_t kPollNodeInterval_micros = 3000000;  // 3s
+constexpr int64_t kSetupInterval_micros = 31000000;    // 31s
 
 }  // namespace
 
@@ -73,11 +73,12 @@ void Receiver::PollNode(int64_t now_micros) {
   // Send query to node.
   const uint32_t sequence = node_sequences_[next_node_index_];
   const uint8_t address =
-     config_.node_address_mask.NthSetBitIndex(next_node_index_);
+      config_.node_address_mask.NthSetBitIndex(next_node_index_);
   const StatusQueryMessage query = {.sequence = sequence};
   const Span packet = serializer_.Serialize(address, query);
   hc12_.Write(packet);
-  SBB_DEBUGF("Querying for node[%d] %06d", next_node_index_, FormatAddress(address));
+  SBB_DEBUGF("Querying for node[%d] %06d", next_node_index_,
+             FormatAddress(address));
 
   // Wait for response.
   const Span rx = hc12_.ReadBytesUntil(0);
@@ -90,9 +91,8 @@ void Receiver::PollNode(int64_t now_micros) {
       if (response.has_event) {
         const int32_t millis_age =
             (response.micros - response.event.micros) / 1000;
-        ConsolePrintF("pulso en dispositivo %06d, hace %ld milisegundos", 
-                      FormatAddress(address),
-                      millis_age);
+        ConsolePrintF("pulso en dispositivo %06d, hace %ld milisegundos",
+                      FormatAddress(address), millis_age);
         node_sequences_[next_node_index_] = response.event.sequence;
       }
     }

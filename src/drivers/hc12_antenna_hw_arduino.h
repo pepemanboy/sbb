@@ -10,12 +10,12 @@ namespace sbb {
 class Hc12AntennaHw {
  public:
   struct Options {
-    HardwareSerial &serial;
+    HardwareSerial& serial;
     int set_pin;
   };
 
   explicit Hc12AntennaHw(const Options& options)
-      : options_(options), serial_(options_.serial){}
+      : options_(options), serial_(options_.serial) {}
 
   bool Setup(int channel);
   void Write(Span message);
@@ -27,7 +27,7 @@ class Hc12AntennaHw {
   bool SetupOneTime(int channel);
 
   Options options_;
-  HardwareSerial &serial_;
+  HardwareSerial& serial_;
 
   uint8_t rx_buffer_[50];
   int rx_buffer_length_ = 0;

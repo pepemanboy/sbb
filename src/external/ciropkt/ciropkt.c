@@ -32,10 +32,9 @@
 //// STATIC FUNCTIONS
 
 /** Convert packet to buffer */
-static pkt_res_t pktBufferize(const packet_t *p, uint8_t *buf, const size_t len)
-{
-  if (len < pkt_LENGTH(p->data_size))
-   return pkt_EMemory;
+static pkt_res_t pktBufferize(const packet_t *p, uint8_t *buf,
+                              const size_t len) {
+  if (len < pkt_LENGTH(p->data_size)) return pkt_EMemory;
 
   buf[0] = p->address;
   buf[1] = p->command;
@@ -49,26 +48,22 @@ static pkt_res_t pktBufferize(const packet_t *p, uint8_t *buf, const size_t len)
 }
 
 /** Convert buffer to packet */
-static pkt_res_t pktDebufferize(packet_t *p, const uint8_t *buf, size_t len)
-{
-  if (len < pkt_LENGTH(0))
-    return pkt_EPartial;
+static pkt_res_t pktDebufferize(packet_t *p, const uint8_t *buf, size_t len) {
+  if (len < pkt_LENGTH(0)) return pkt_EPartial;
 
   p->address = buf[0];
   p->command = buf[1];
   p->sequence = buf[2];
-  p->crc = buf[len-1];
+  p->crc = buf[len - 1];
 
   return pktUpdate(p, buf + pkt_HEADERSIZE, len - pkt_EXTRASIZE);
 }
 
 /** Obtain packet CRC */
-static pkt_res_t pktCrc(const packet_t *p, uint8_t *crc)
-{
+static pkt_res_t pktCrc(const packet_t *p, uint8_t *crc) {
   uint8_t temp[pkt_MAXSPACE];
   pkt_res_t r = pktBufferize(p, temp, sizeof(temp));
-  if (r != pkt_Ok)
-    return r;
+  if (r != pkt_Ok) return r;
 
   *crc = ~crc8(temp, pkt_LENGTH(p->data_size) - pkt_CRCSIZE);
   return pkt_Ok;
@@ -76,10 +71,8 @@ static pkt_res_t pktCrc(const packet_t *p, uint8_t *crc)
 
 //// PUBLIC FUNCTIONS
 
-pkt_res_t pktUpdate(packet_t *p, const void *dat, const size_t len)
-{
-  if (len > pkt_MAXDATASIZE)
-    return pkt_EMemory;
+pkt_res_t pktUpdate(packet_t *p, const void *dat, const size_t len) {
+  if (len > pkt_MAXDATASIZE) return pkt_EMemory;
 
   memcpy(p->data, dat, len);
 
@@ -87,47 +80,36 @@ pkt_res_t pktUpdate(packet_t *p, const void *dat, const size_t len)
   return pkt_Ok;
 }
 
-bool pktCheck(const packet_t *p)
-{
+bool pktCheck(const packet_t *p) {
   uint8_t crc;
-  pkt_res_t r = pktCrc(p,&crc);
-  if (r != pkt_Ok)
-    return false;
+  pkt_res_t r = pktCrc(p, &crc);
+  if (r != pkt_Ok) return false;
 
   return (crc == p->crc);
 }
 
-pkt_res_t pktRefresh(packet_t *p)
-{
-  return pktCrc(p, &p->crc);
-}
+pkt_res_t pktRefresh(packet_t *p) { return pktCrc(p, &p->crc); }
 
-uint8_t pktSerialize(const packet_t *p, uint8_t *buf, size_t *len)
-{
-  if (*len < pkt_LENGTH(p->data_size) + 1)
-    return pkt_EMemory;
+uint8_t pktSerialize(const packet_t *p, uint8_t *buf, size_t *len) {
+  if (*len < pkt_LENGTH(p->data_size) + 1) return pkt_EMemory;
 
   uint8_t temp[pkt_MAXSPACE];
   pkt_res_t res = pktBufferize(p, temp, sizeof(temp));
-  if (res != pkt_Ok)
-    return res;
+  if (res != pkt_Ok) return res;
 
   *len = cobs_encode(temp, pkt_LENGTH(p->data_size), buf);
 
   return pkt_Ok;
 }
 
-pkt_res_t pktDeserialize(packet_t *p, const uint8_t *buf, size_t len)
-{
+pkt_res_t pktDeserialize(packet_t *p, const uint8_t *buf, size_t len) {
   uint8_t temp[pkt_MAXSPACE];
 
   uint8_t l = cobs_decode(buf, len, temp);
-  if (!l)
-    return pkt_EData;
+  if (!l) return pkt_EData;
 
   pkt_res_t r = pktDebufferize(p, temp, l);
-  if (r != pkt_Ok)
-    return r;
+  if (r != pkt_Ok) return r;
 
   return pkt_Ok;
 }

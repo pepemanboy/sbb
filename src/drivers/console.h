@@ -6,7 +6,7 @@ namespace sbb {
 void ConsoleInit();
 void ConsoleClose();
 
-void ConsolePrintF(const char * format, ...);
+void ConsolePrintF(const char* format, ...);
 
 }  // namespace sbb
 

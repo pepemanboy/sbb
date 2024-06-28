@@ -13,7 +13,7 @@ void HardwareLedYellowSet(bool state);
 
 int HardwareDipSwitchGet();
 
-}  // node_v2
+}  // namespace node_v2
 }  // namespace sumitomo_sensor
 }  // namespace sbb
 

@@ -3,8 +3,8 @@
 
 #include <Arduino.h>
 
-#include "drivers/gpio.h"
 #include "drivers/dip_switch.h"
+#include "drivers/gpio.h"
 
 namespace sbb {
 namespace sumitomo_sensor {
@@ -13,7 +13,7 @@ namespace node_v2 {
 constexpr HardwareSerial *kHc12Serial = &Serial1;
 constexpr int kHc12SetPin = 20;
 
-// v2.0 PCB has PN532 connected incorrectly to Serial3 (TX to TX and RX to RX), 
+// v2.0 PCB has PN532 connected incorrectly to Serial3 (TX to TX and RX to RX),
 // but it needs to be reworked to re-route pins to Serial2.
 constexpr HardwareSerial *kPn532Serial = &Serial2;
 
@@ -45,6 +45,3 @@ constexpr DipSwitchPins kDipSwitch = {
 }  // namespace sbb
 
 #endif  // SBB_SUMITOMO_SENSOR_NODE_V2_BOARD_H
-
-
-

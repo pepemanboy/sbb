@@ -27,9 +27,9 @@
 
 //// INCLUDES
 
+#include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
-#include <stdbool.h>
 
 #ifndef CIROPKT_RESULT_H
 #define CIROPKT_RESULT_H
@@ -38,8 +38,7 @@
 typedef uint8_t pkt_res_t;
 
 /** Error codes enum */
-typedef enum
-{
+typedef enum {
   pkt_Ok = 0,
   pkt_Error,
   pkt_EMemory,
@@ -52,6 +51,6 @@ typedef enum
   pkt_ETimeout,
   pkt_EOverflow,
   pkt_EId,
-}error_e;
+} error_e;
 
-#endif // CIROPKT_RESULT_H
+#endif  // CIROPKT_RESULT_H

@@ -16,7 +16,7 @@ class Hc12Antenna {
   };
 
   explicit Hc12Antenna(const Options& options)
-      : options_(options), serial_(options_.rx_pin, options_.tx_pin){}
+      : options_(options), serial_(options_.rx_pin, options_.tx_pin) {}
 
   bool Setup(int channel);
   void Write(Span message);
