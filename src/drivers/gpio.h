@@ -3,6 +3,8 @@
 
 namespace sbb {
 
+typedef void (*GpioInterruptCallback) (); 
+
 enum class GpioMode {
   kInput,
   kOutput,
@@ -19,11 +21,24 @@ struct GpioPin {
   int pin;
 };
 
+enum class GpioInterruptTrigger {
+  kLow,
+  kChange,
+  kRisingEdge,
+  kFallingEdge,
+  kHigh,
+};
+
 void GpioConfigure(const GpioPin &gpio);
 
 void GpioSet(const GpioPin &gpio, bool state);
 
 bool GpioGet(const GpioPin &gpio);
+
+void GpioAttachInterrupt(
+  const GpioPin &gpio, 
+  GpioInterruptTrigger trigger,
+  GpioInterruptCallback callback);
 
 }  // namespace sbb
 
