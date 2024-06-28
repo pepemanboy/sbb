@@ -1,10 +1,11 @@
+#include "apps/sumitomo_sensor/node/node.h"
+
 #include <Arduino.h>
 
 #include "apps/sumitomo_sensor/event.h"
 #include "apps/sumitomo_sensor/message_definitions.h"
 #include "apps/sumitomo_sensor/node/board.h"
 #include "apps/sumitomo_sensor/node/hardware.h"
-#include "apps/sumitomo_sensor/node/node.h"
 #include "apps/sumitomo_sensor/node/sensor.h"
 #include "common/bit_array.h"
 #include "drivers/clock.h"

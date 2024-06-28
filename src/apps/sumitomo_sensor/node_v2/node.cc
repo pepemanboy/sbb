@@ -1,10 +1,11 @@
+#include "apps/sumitomo_sensor/node_v2/node.h"
+
 #include <Arduino.h>
 
 #include "apps/sumitomo_sensor/event.h"
 #include "apps/sumitomo_sensor/message_definitions.h"
 #include "apps/sumitomo_sensor/node_v2/board.h"
 #include "apps/sumitomo_sensor/node_v2/hardware.h"
-#include "apps/sumitomo_sensor/node_v2/node.h"
 #include "apps/sumitomo_sensor/node_v2/sensor.h"
 #include "common/bit_array.h"
 #include "drivers/clock.h"
@@ -19,9 +20,7 @@ namespace {
 
 constexpr int64_t kSetupInterval_micros = 61000000;  // 61s
 
-Sensor::Options GetSensorOptions() {
-  return {.debounce_micros = 5000000};
-}
+Sensor::Options GetSensorOptions() { return {.debounce_micros = 5000000}; }
 
 bool sensor_interrupt_triggered_ = false;
 void SensorInterruptCallback() {

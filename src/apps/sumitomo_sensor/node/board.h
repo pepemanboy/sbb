@@ -3,8 +3,8 @@
 
 #include <Arduino.h>
 
-#include "drivers/gpio.h"
 #include "drivers/dip_switch.h"
+#include "drivers/gpio.h"
 
 namespace sbb {
 namespace sumitomo_sensor {
@@ -48,6 +48,3 @@ constexpr DipSwitchPins kDipSwitch = {
 }  // namespace sbb
 
 #endif  // SBB_SUMITOMO_SENSOR_NODE_BOARD_H
-
-
-

@@ -14,7 +14,8 @@ class Sensor {
     int64_t debounce_micros;
   };
 
-  explicit Sensor(const Options &options): debounce_(options.debounce_micros){}
+  explicit Sensor(const Options &options)
+      : debounce_(options.debounce_micros) {}
 
   // Returns true on debounced `reading` rising edge.
   bool Poll(bool reading, int64_t micros) {

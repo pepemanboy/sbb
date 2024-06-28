@@ -33,10 +33,8 @@
 
 //// PUBLIC FUNCTIONS
 
-uint8_t crc8(const uint8_t *dat, size_t len)
-{
+uint8_t crc8(const uint8_t *dat, size_t len) {
   uint8_t c = 0;
-  for(size_t i = 0; i < len; i++)
-    c = _crc_tb0x07[(c ^ dat[i]) & 0xFF] & 0xFF;
+  for (size_t i = 0; i < len; i++) c = _crc_tb0x07[(c ^ dat[i]) & 0xFF] & 0xFF;
   return c;
 }

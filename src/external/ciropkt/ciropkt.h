@@ -29,10 +29,11 @@
 
 //// INCLUDES
 
-#include "result.h"
+#include <string.h>
+
 #include "cobs.h"
 #include "crc8.h"
-#include <string.h>
+#include "result.h"
 
 #ifndef CIROPKT_H
 #define CIROPKT_H
@@ -44,7 +45,10 @@ extern "C" {
 //// DEFINES
 
 /** Default static initialization value of packet object */
-#define pkt_INIT {0, 0, 0, 0, {0}}
+#define pkt_INIT      \
+  {                   \
+    0, 0, 0, 0, { 0 } \
+  }
 
 /** Declare and initialize a packet variable */
 #define pkt_VAR(p) packet_t p = pkt_INIT
@@ -71,16 +75,15 @@ extern "C" {
 
 /** C ciropkt packet object */
 typedef struct packet_t packet_t;
-struct packet_t
-{
-    uint8_t address; ///< Slave address
-    uint8_t command; ///< Packet command
-    uint8_t sequence; ///< Packet sequence
-    uint8_t crc; ///< Calculated/received crc
+struct packet_t {
+  uint8_t address;   ///< Slave address
+  uint8_t command;   ///< Packet command
+  uint8_t sequence;  ///< Packet sequence
+  uint8_t crc;       ///< Calculated/received crc
 
-    size_t data_size; ///< Packet used data bytes
+  size_t data_size;  ///< Packet used data bytes
 
-    uint8_t data[pkt_MAXDATASIZE]; ///< Internal data buffer
+  uint8_t data[pkt_MAXDATASIZE];  ///< Internal data buffer
 };
 
 //// FORWARD FUNCTIONS DECLARATIONS
@@ -104,4 +107,4 @@ pkt_res_t pktDeserialize(packet_t *p, const uint8_t *buf, const size_t len);
 }
 #endif
 
-#endif // CIROPKT_H
+#endif  // CIROPKT_H

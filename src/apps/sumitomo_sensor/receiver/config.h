@@ -3,8 +3,8 @@
 
 #include <stdint.h>
 
-#include "common/bit_array.h"
 #include "apps/sumitomo_sensor/message_definitions.h"
+#include "common/bit_array.h"
 
 namespace sbb {
 namespace sumitomo_sensor {

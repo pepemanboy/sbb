@@ -8,8 +8,8 @@
 #include "common/debounce.h"
 #include "common/led.h"
 #include "common/message.h"
-#include "common/timer.h"
 #include "common/time_converter.h"
+#include "common/timer.h"
 #include "drivers/hc12_antenna_arduino.h"
 #include "drivers/pn_532_nfc_arduino.h"
 
@@ -26,7 +26,7 @@ class Node {
     };
     SensorType sensor_type;
   };
-  
+
   Node(const Options &options);
 
   void Setup();
@@ -65,7 +65,7 @@ class Node {
   MessageUnpacker unpacker_;
 
   uint32_t event_sequence_ = 0;
-  
+
   Timer setup_timer_;
 };
 
