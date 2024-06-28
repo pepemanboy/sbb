@@ -41,8 +41,7 @@ constexpr DipSwitchPins kDipSwitch = {
 };
 
 constexpr GpioPin kInductiveSensor = {
-  .mode = GpioMode::kInput, .polarity = GpioPolarity::kActiveLow, .pin = 21
-};
+    .mode = GpioMode::kInput, .polarity = GpioPolarity::kActiveLow, .pin = 21};
 
 }  // namespace node_v2
 }  // namespace sumitomo_sensor

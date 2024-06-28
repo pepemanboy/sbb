@@ -6,12 +6,17 @@ namespace sbb {
 namespace {
 
 int ArduinoInterruptTriggerMode(GpioInterruptTrigger trigger) {
-  switch(trigger) {
-    case GpioInterruptTrigger::kLow: return LOW;
-    case GpioInterruptTrigger::kChange: return CHANGE;
-    case GpioInterruptTrigger::kRisingEdge: return RISING;
-    case GpioInterruptTrigger::kFallingEdge: return FALLING;
-    case GpioInterruptTrigger::kHigh: return HIGH;
+  switch (trigger) {
+    case GpioInterruptTrigger::kLow:
+      return LOW;
+    case GpioInterruptTrigger::kChange:
+      return CHANGE;
+    case GpioInterruptTrigger::kRisingEdge:
+      return RISING;
+    case GpioInterruptTrigger::kFallingEdge:
+      return FALLING;
+    case GpioInterruptTrigger::kHigh:
+      return HIGH;
   }
 }
 
@@ -44,11 +49,9 @@ bool GpioGet(const GpioPin &gpio) {
   }
 }
 
-void GpioAttachInterrupt(const GpioPin &gpio, 
-  GpioInterruptTrigger trigger,
-  GpioInterruptCallback callback) {
-  attachInterrupt(digitalPinToInterrupt(gpio.pin),
-                  callback,
+void GpioAttachInterrupt(const GpioPin &gpio, GpioInterruptTrigger trigger,
+                         GpioInterruptCallback callback) {
+  attachInterrupt(digitalPinToInterrupt(gpio.pin), callback,
                   ArduinoInterruptTriggerMode(trigger));
 }
 

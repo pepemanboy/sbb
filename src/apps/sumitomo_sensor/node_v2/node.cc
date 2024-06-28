@@ -23,9 +23,7 @@ constexpr int64_t kSetupInterval_micros = 61000000;  // 61s
 Sensor::Options GetSensorOptions() { return {.debounce_micros = 5000000}; }
 
 bool sensor_interrupt_triggered_ = false;
-void SensorInterruptCallback() {
-  sensor_interrupt_triggered_ = true;
-}
+void SensorInterruptCallback() { sensor_interrupt_triggered_ = true; }
 bool GetAndMaybeClearSensorInterrupt() {
   if (!sensor_interrupt_triggered_) return false;
   sensor_interrupt_triggered_ = false;
@@ -42,10 +40,8 @@ Node::Node()
 void Node::Setup() {
   // SBB_DEBUG_ENABLE();
   HardwareInit();
-  GpioAttachInterrupt(
-    kInductiveSensor,
-    GpioInterruptTrigger::kFallingEdge,
-    SensorInterruptCallback);
+  GpioAttachInterrupt(kInductiveSensor, GpioInterruptTrigger::kFallingEdge,
+                      SensorInterruptCallback);
 
   // Read DIP switch to configure node ID.
   node_id_ = HardwareDipSwitchGet();
@@ -88,7 +84,6 @@ void Node::UpdateLeds(int64_t now_micros) {
   HardwareLedYellowSet(led_yellow_.Poll(now_micros));
   HardwareLedRedSet(led_red_.Poll(now_micros));
 }
-
 
 bool Node::GetSensorRawReading() {
   if (GetAndMaybeClearSensorInterrupt()) return true;

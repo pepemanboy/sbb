@@ -15,7 +15,7 @@ int HardwareDipSwitchGet();
 
 bool HardwareGetInductiveSensor();
 
-}  // node_v2
+}  // namespace node_v2
 }  // namespace sumitomo_sensor
 }  // namespace sbb
 
