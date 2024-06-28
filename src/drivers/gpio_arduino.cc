@@ -18,6 +18,8 @@ int ArduinoInterruptTriggerMode(GpioInterruptTrigger trigger) {
     case GpioInterruptTrigger::kHigh:
       return HIGH;
   }
+
+  return -1;  // Should never get here.
 }
 
 }  // namespace
