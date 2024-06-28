@@ -89,6 +89,7 @@ void Node::UpdateLeds(int64_t now_micros) {
   HardwareLedRedSet(led_red_.Poll(now_micros));
 }
 
+
 bool Node::GetSensorRawReading() {
   if (GetAndMaybeClearSensorInterrupt()) return true;
   return HardwareGetInductiveSensor();
