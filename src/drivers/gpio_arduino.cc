@@ -32,6 +32,9 @@ void GpioConfigure(const GpioPin &gpio) {
     case GpioMode::kOutput:
       pinMode(gpio.pin, OUTPUT);
       break;
+    case GpioMode::kInputPullUp:
+      pinMode(gpio.pin, INPUT_PULLUP);
+      break;
   }
 }
 
