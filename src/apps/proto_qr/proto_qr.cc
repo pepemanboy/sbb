@@ -17,7 +17,7 @@ constexpr GpioPin kInductiveSensor = {.mode = GpioMode::kInputPullUp,
                                       .polarity = GpioPolarity::kActiveLow,
                                       .pin = 21};
 constexpr GpioPin kQrSensorReading = {.mode = GpioMode::kInputPullUp,
-                                      .polarity = GpioPolarity::kActiveHigh,
+                                      .polarity = GpioPolarity::kActiveLow,
                                       .pin = 20};
 constexpr GpioPin kQrSensorTrigger = {
     .mode = GpioMode::kOutput, .polarity = GpioPolarity::kActiveLow, .pin = 2};
