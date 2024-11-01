@@ -8,6 +8,7 @@ typedef void (*GpioInterruptCallback)();
 enum class GpioMode {
   kInput,
   kOutput,
+  kInputPullUp,
 };
 
 enum class GpioPolarity {
