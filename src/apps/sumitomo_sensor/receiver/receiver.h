@@ -29,7 +29,7 @@ class Receiver {
   void UpdateLed(int64_t now_micros);
   void PollNode(int64_t now_micros);
 
-  int FormatAddress(uint8_t address);
+  uint32_t FormatAddress(uint8_t address);
 
   const ReceiverConfig config_;
 

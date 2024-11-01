@@ -103,7 +103,7 @@ void Receiver::PollNode(int64_t now_micros) {
                    config_.node_address_mask.CountBits() - 1);
 }
 
-int Receiver::FormatAddress(uint8_t address) {
+uint32_t Receiver::FormatAddress(uint8_t address) {
   return kReceiverNodeComboChannel * 1000 + address;
 }
 
