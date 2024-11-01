@@ -11,7 +11,7 @@ namespace sbb {
 namespace sumitomo_sensor {
 
 // Every receiver - nodes combo should have a unique channel.
-constexpr int kReceiverNodeComboChannel = 30;
+constexpr int kReceiverNodeComboChannel = 33;
 
 constexpr int kReceiverAddress = 0;
 constexpr int kMaxNumNodes = 128;
