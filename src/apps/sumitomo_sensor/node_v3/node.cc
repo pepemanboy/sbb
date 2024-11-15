@@ -94,6 +94,7 @@ bool Node::GetSensorRawReading() {
     SBB_DEBUGF("Intermedio %d", HardwareGetInductiveSensorsId());
     return true;
   }
+  return false;
 }
 
 void Node::ReadSensor(int64_t now_micros) {
