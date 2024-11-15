@@ -48,7 +48,7 @@ uint32_t HardwareGetInductiveSensorsId() {
   // Only sensors 1 .. 8 are used for ID.
   for (int i = 1; i < SBB_ARRAYSIZE(kInductiveSensors) - 1; ++i) {
     if (GpioGet(kInductiveSensors[i])) {
-      id |= bits::SingleBit<uint32_t>(i);
+      id |= bits::SingleBit<uint32_t>(i - 1);
     }
   }
   return id;
