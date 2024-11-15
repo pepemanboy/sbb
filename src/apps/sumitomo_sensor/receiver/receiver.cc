@@ -77,13 +77,14 @@ void Receiver::PollNode(int64_t now_micros) {
   const StatusQueryMessage query = {.sequence = sequence};
   const Span packet = serializer_.Serialize(address, query);
   hc12_.Write(packet);
-  SBB_DEBUGF("Querying for node[%d] %06d", next_node_index_,
-             FormatAddress(address));
+  SBB_DEBUGF("Querying for node[%d] %03d%03d", next_node_index_,
+             kReceiverNodeComboChannel, address);
 
   // Wait for response.
   const Span rx = hc12_.ReadBytesUntil(0);
   if (rx.length > 0) {
-    ConsolePrintF("dispositivo %06d ok", FormatAddress(address));
+    ConsolePrintF("dispositivo %03d%03d ok", kReceiverNodeComboChannel,
+                  address);
 
     StatusResponseMessage response;
     if (unpacker_.Unpack(rx.buffer, rx.length) &&
@@ -91,8 +92,8 @@ void Receiver::PollNode(int64_t now_micros) {
       if (response.has_event) {
         const int32_t millis_age =
             (response.micros - response.event.micros) / 1000;
-        ConsolePrintF("pulso en dispositivo %06d, hace %ld milisegundos",
-                      FormatAddress(address), millis_age);
+        ConsolePrintF("pulso en dispositivo %03d%03d, hace %ld milisegundos",
+                      kReceiverNodeComboChannel, address, millis_age);
         node_sequences_[next_node_index_] = response.event.sequence;
       }
     }
@@ -101,10 +102,6 @@ void Receiver::PollNode(int64_t now_micros) {
   // Next node.
   IncrementAndWrap(&next_node_index_, 0,
                    config_.node_address_mask.CountBits() - 1);
-}
-
-int Receiver::FormatAddress(uint8_t address) {
-  return kReceiverNodeComboChannel * 1000 + address;
 }
 
 }  // namespace receiver
