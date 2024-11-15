@@ -88,8 +88,12 @@ void Node::UpdateLeds(int64_t now_micros) {
 }
 
 bool Node::GetSensorRawReading() {
-  if (GetAndMaybeClearSensorInterrupt()) return true;
-  return HardwareGetInterruptPin();
+  if (GetAndMaybeClearSensorInterrupt()) {
+    return true;
+  } else if (HardwareGetInterruptPin()) {
+    SBB_DEBUGF("Intermedio %d", HardwareGetInductiveSensorsId());
+    return true;
+  }
 }
 
 void Node::ReadSensor(int64_t now_micros) {
