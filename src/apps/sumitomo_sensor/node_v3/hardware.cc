@@ -1,14 +1,17 @@
-#include "apps/sumitomo_sensor/node_v2/hardware.h"
+#include "apps/sumitomo_sensor/node_v3/hardware.h"
 
+#include <stdint.h>
 #include <Arduino.h>
 
-#include "apps/sumitomo_sensor/node_v2/board.h"
+#include "apps/sumitomo_sensor/node_v3/board.h"
 #include "drivers/dip_switch.h"
 #include "drivers/gpio.h"
+#include "common/bits.h"
+#include "common/array_size.h"
 
 namespace sbb {
 namespace sumitomo_sensor {
-namespace node_v2 {
+namespace node_v3 {
 
 void HardwareInit() {
   // LEDs.
@@ -23,8 +26,13 @@ void HardwareInit() {
   // DIP switch.
   DipSwitchConfigure(kDipSwitch);
 
-  // Inductive sensor.
-  GpioConfigure(kInductiveSensor);
+  // Inductive sensors.
+  for (const auto &gpio : kInductiveSensors){
+     GpioConfigure(gpio);
+  }
+
+  // Interrupt pin.
+  GpioConfigure(kInterruptPin);
 }
 
 void HardwareLedGreenSet(bool state) { GpioSet(kLedGreen, state); }
@@ -35,8 +43,21 @@ void HardwareLedYellowSet(bool state) { GpioSet(kLedYellow, state); }
 
 int HardwareDipSwitchGet() { return DipSwitchGet(kDipSwitch); }
 
-bool HardwareGetInductiveSensor() { return GpioGet(kInductiveSensor); }
+uint32_t HardwareGetInductiveSensorsId() {
+  int id = 0;
+  // Only sensors 1 .. 8 are used for ID.
+  for (int i = 1; i < SBB_ARRAYSIZE(kInductiveSensors) - 1; ++i) {
+    if (GpioGet(kInductiveSensors[i])) {
+      id |= bits::SingleBit<uint32_t>(i);
+    }
+  }
+  return id;
+}
 
-}  // namespace node_v2
+bool HardwareGetInterruptPin() {
+  return GpioGet(kInterruptPin);
+}
+
+}  // namespace node_v3
 }  // namespace sumitomo_sensor
 }  // namespace sbb

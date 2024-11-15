@@ -1,5 +1,5 @@
-#ifndef SBB_SUMITOMO_SENSOR_NODE_V2_BOARD_H
-#define SBB_SUMITOMO_SENSOR_NODE_V2_BOARD_H
+#ifndef SBB_SUMITOMO_SENSOR_NODE_V3_BOARD_H
+#define SBB_SUMITOMO_SENSOR_NODE_V3_BOARD_H
 
 #include <Arduino.h>
 
@@ -8,14 +8,10 @@
 
 namespace sbb {
 namespace sumitomo_sensor {
-namespace node_v2 {
+namespace node_v3 {
 
 constexpr HardwareSerial *kHc12Serial = &Serial1;
 constexpr int kHc12SetPin = 20;
-
-// v2.0 PCB has PN532 connected incorrectly to Serial3 (TX to TX and RX to RX),
-// but it needs to be reworked to re-route pins to Serial2.
-constexpr HardwareSerial *kPn532Serial = &Serial2;
 
 constexpr GpioPin kLedGreen = {
     .mode = GpioMode::kOutput, .polarity = GpioPolarity::kActiveLow, .pin = A3};
@@ -40,11 +36,34 @@ constexpr DipSwitchPins kDipSwitch = {
     .number_of_pins = 8,
 };
 
-constexpr GpioPin kInductiveSensor = {
-    .mode = GpioMode::kInput, .polarity = GpioPolarity::kActiveLow, .pin = 21};
+constexpr GpioPin kInductiveSensors[] = {
+  // Sensor 0.
+  {.mode = GpioMode::kInput, .polarity = GpioPolarity::kActiveLow, .pin = 10},
+  // Sensor 1.
+  {.mode = GpioMode::kInput, .polarity = GpioPolarity::kActiveLow, .pin = 13},
+  // Sensor 2.
+  {.mode = GpioMode::kInput, .polarity = GpioPolarity::kActiveLow, .pin = 12},
+  // Sensor 3.
+  {.mode = GpioMode::kInput, .polarity = GpioPolarity::kActiveLow, .pin = 11},
+  // Sensor 4.
+  {.mode = GpioMode::kInput, .polarity = GpioPolarity::kActiveLow, .pin = 8},
+  // Sensor 5.
+  {.mode = GpioMode::kInput, .polarity = GpioPolarity::kActiveLow, .pin = 6},
+  // Sensor 6.
+  {.mode = GpioMode::kInput, .polarity = GpioPolarity::kActiveLow, .pin = 3},
+  // Sensor 7.
+  {.mode = GpioMode::kInput, .polarity = GpioPolarity::kActiveLow, .pin = 4},
+  // Sensor 8.
+  {.mode = GpioMode::kInput, .polarity = GpioPolarity::kActiveLow, .pin = 7},
+  // Sensor 0.
+  {.mode = GpioMode::kInput, .polarity = GpioPolarity::kActiveLow, .pin = 9},
+};
 
-}  // namespace node_v2
+constexpr GpioPin kInterruptPin = {
+  .mode = GpioMode::kInput, .polarity = GpioPolarity::kActiveLow, .pin = 2};
+
+}  // namespace node_v3
 }  // namespace sumitomo_sensor
 }  // namespace sbb
 
-#endif  // SBB_SUMITOMO_SENSOR_NODE_V2_BOARD_H
+#endif  // SBB_SUMITOMO_SENSOR_NODE_V3_BOARD_H

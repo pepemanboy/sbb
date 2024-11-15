@@ -1,9 +1,9 @@
-#ifndef SBB_SUMITOMO_SENSOR_NODE_V2_NODE_H
-#define SBB_SUMITOMO_SENSOR_NODE_V2_NODE_H
+#ifndef SBB_SUMITOMO_SENSOR_NODE_V3_NODE_H
+#define SBB_SUMITOMO_SENSOR_NODE_V3_NODE_H
 
 #include "apps/sumitomo_sensor/event.h"
-#include "apps/sumitomo_sensor/node_v2/hardware.h"
-#include "apps/sumitomo_sensor/node_v2/sensor.h"
+#include "apps/sumitomo_sensor/node_v3/hardware.h"
+#include "apps/sumitomo_sensor/node_v3/sensor.h"
 #include "common/circular_buffer.h"
 #include "common/debounce.h"
 #include "common/led.h"
@@ -15,7 +15,7 @@
 
 namespace sbb {
 namespace sumitomo_sensor {
-namespace node_v2 {
+namespace node_v3 {
 
 class Node {
  public:
@@ -56,8 +56,8 @@ class Node {
   Timer setup_timer_;
 };
 
-}  // namespace node_v2
+}  // namespace node_v3
 }  // namespace sumitomo_sensor
 }  // namespace sbb
 
-#endif  // SBB_SUMITOMO_SENSOR_NODE_V2_NODE_H
+#endif  // SBB_SUMITOMO_SENSOR_NODE_V3_NODE_H

@@ -9,6 +9,7 @@ namespace sumitomo_sensor {
 struct Event {
   int64_t micros;
   uint32_t sequence;
+  uint32_t part_id;
 };
 
 }  // namespace sumitomo_sensor

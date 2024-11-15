@@ -92,8 +92,8 @@ void Receiver::PollNode(int64_t now_micros) {
       if (response.has_event) {
         const int32_t millis_age =
             (response.micros - response.event.micros) / 1000;
-        ConsolePrintF("pulso en dispositivo %03d%03d, hace %ld milisegundos",
-                      kReceiverNodeComboChannel, address, millis_age);
+        ConsolePrintF("pulso en dispositivo %03d%03d, hace %ld milisegundos, ID %d",
+                      kReceiverNodeComboChannel, address, millis_age, response.event.part_id);
         node_sequences_[next_node_index_] = response.event.sequence;
       }
     }

@@ -1,12 +1,12 @@
-#include "apps/sumitomo_sensor/node_v2/node.h"
+#include "apps/sumitomo_sensor/node_v3/node.h"
 
 #include <Arduino.h>
 
 #include "apps/sumitomo_sensor/event.h"
 #include "apps/sumitomo_sensor/message_definitions.h"
-#include "apps/sumitomo_sensor/node_v2/board.h"
-#include "apps/sumitomo_sensor/node_v2/hardware.h"
-#include "apps/sumitomo_sensor/node_v2/sensor.h"
+#include "apps/sumitomo_sensor/node_v3/board.h"
+#include "apps/sumitomo_sensor/node_v3/hardware.h"
+#include "apps/sumitomo_sensor/node_v3/sensor.h"
 #include "common/bit_array.h"
 #include "drivers/clock.h"
 #include "drivers/console.h"
@@ -15,17 +15,19 @@
 
 namespace sbb {
 namespace sumitomo_sensor {
-namespace node_v2 {
+namespace node_v3 {
 namespace {
 
 constexpr int64_t kSetupInterval_micros = 61000000;  // 61s
 
 Sensor::Options GetSensorOptions() { return {.debounce_micros = 5000000}; }
 
+uint32_t part_id = 0;
 bool sensor_interrupt_triggered_ = false;
 void SensorInterruptCallback() { sensor_interrupt_triggered_ = true; }
 bool GetAndMaybeClearSensorInterrupt() {
   if (!sensor_interrupt_triggered_) return false;
+  part_id = HardwareGetInductiveSensorsId();
   sensor_interrupt_triggered_ = false;
   return true;
 }
@@ -40,7 +42,7 @@ Node::Node()
 void Node::Setup() {
   // SBB_DEBUG_ENABLE();
   HardwareInit();
-  GpioAttachInterrupt(kInductiveSensor, GpioInterruptTrigger::kFallingEdge,
+  GpioAttachInterrupt(kInterruptPin, GpioInterruptTrigger::kFallingEdge,
                       SensorInterruptCallback);
 
   // Read DIP switch to configure node ID.
@@ -87,7 +89,7 @@ void Node::UpdateLeds(int64_t now_micros) {
 
 bool Node::GetSensorRawReading() {
   if (GetAndMaybeClearSensorInterrupt()) return true;
-  return HardwareGetInductiveSensor();
+  return HardwareGetInterruptPin();
 }
 
 void Node::ReadSensor(int64_t now_micros) {
@@ -98,8 +100,8 @@ void Node::ReadSensor(int64_t now_micros) {
 
   if (rising_edge_detected) {
     events_.PushAndMaybeEvict(
-        {.micros = now_micros, .sequence = ++event_sequence_});
-    SBB_DEBUGF("Card detected");
+        {.micros = now_micros, .sequence = ++event_sequence_, .part_id = part_id});
+    SBB_DEBUGF("Part detected %d", part_id);
   }
 }
 
@@ -135,6 +137,6 @@ bool Node::MaybeProcessStatusQueryMessage(int64_t now_micros) {
   return true;
 }
 
-}  // namespace node_v2
+}  // namespace node_v3
 }  // namespace sumitomo_sensor
 }  // namespace sbb
