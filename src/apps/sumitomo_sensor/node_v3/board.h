@@ -55,7 +55,7 @@ constexpr GpioPin kInductiveSensors[] = {
   {.mode = GpioMode::kInput, .polarity = GpioPolarity::kActiveLow, .pin = 4},
   // Sensor 8.
   {.mode = GpioMode::kInput, .polarity = GpioPolarity::kActiveLow, .pin = 7},
-  // Sensor 0.
+  // Sensor 9.
   {.mode = GpioMode::kInput, .polarity = GpioPolarity::kActiveLow, .pin = 9},
 };
 
