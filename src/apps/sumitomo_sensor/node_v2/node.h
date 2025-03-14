@@ -30,6 +30,7 @@ class Node {
   bool GetSensorRawReading();
 
   void UpdateLeds(int64_t now_micros);
+  void UpdateBuzzer(int64_t now_micros);
   void ReadSensor(int64_t now_micros);
   void HandleMessages(int64_t now_micros);
 
@@ -47,6 +48,7 @@ class Node {
   Hc12AntennaHw hc12_;
 
   CircularBuffer<Event, 20> events_ = {};
+  MaybeValid<int64_t> last_event_micros_ = {};
 
   MessageSerializer serializer_;
   MessageUnpacker unpacker_;

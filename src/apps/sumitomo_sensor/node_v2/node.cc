@@ -20,6 +20,8 @@ namespace {
 
 constexpr int64_t kSetupInterval_micros = 61000000;  // 61s
 
+constexpr int64_t kBuzzerDelay_micros = 205000000;  // 205s.
+
 Sensor::Options GetSensorOptions() { return {.debounce_micros = 5000000}; }
 
 bool sensor_interrupt_triggered_ = false;
@@ -53,6 +55,7 @@ void Node::Poll() {
   const int64_t now_micros = time_.Update(ClockMicros());
 
   UpdateLeds(now_micros);
+  UpdateBuzzer(now_micros);
 
   if (setup_timer_.Poll(now_micros)) {
     SetupHc12OrDie(kReceiverNodeComboChannel);
@@ -85,6 +88,15 @@ void Node::UpdateLeds(int64_t now_micros) {
   HardwareLedRedSet(led_red_.Poll(now_micros));
 }
 
+void Node::UpdateBuzzer(int64_t now_micros) {
+  if (last_event_micros_.valid &&
+      (now_micros - last_event_micros_.value > kBuzzerDelay_micros)) {
+    GpioSet(kBuzzerPin, true);
+  } else {
+    GpioSet(kBuzzerPin, false);
+  }
+}
+
 bool Node::GetSensorRawReading() {
   if (GetAndMaybeClearSensorInterrupt()) return true;
   return HardwareGetInductiveSensor();
@@ -99,7 +111,8 @@ void Node::ReadSensor(int64_t now_micros) {
   if (rising_edge_detected) {
     events_.PushAndMaybeEvict(
         {.micros = now_micros, .sequence = ++event_sequence_});
-    SBB_DEBUGF("Card detected");
+    last_event_micros_ = MakeValid(now_micros);
+    SBB_DEBUGF("Inductive sensor detected");
   }
 }
 
