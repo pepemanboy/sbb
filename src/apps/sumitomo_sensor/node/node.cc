@@ -120,8 +120,9 @@ void Node::ReadSensor(int64_t now_micros) {
                                                 : Led::Command::kOff);
 
   if (rising_edge_detected) {
-    events_.PushAndMaybeEvict(
-        {.micros = now_micros, .sequence = ++event_sequence_});
+    events_.PushAndMaybeEvict({.type = Event::Type::kRisingEdge,
+                               .micros = now_micros,
+                               .sequence = ++event_sequence_});
   }
 }
 

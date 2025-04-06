@@ -18,8 +18,8 @@ namespace sumitomo_sensor {
 namespace receiver {
 namespace {
 
-constexpr int64_t kPollNodeInterval_micros = 3000000;  // 3s
-constexpr int64_t kSetupInterval_micros = 31000000;    // 31s
+constexpr int64_t kPollNodeInterval_micros = 0;  // As fast as possible.
+constexpr int64_t kSetupInterval_micros = 120000000;    // 31s
 
 }  // namespace
 
@@ -92,9 +92,14 @@ void Receiver::PollNode(int64_t now_micros) {
       if (response.has_event) {
         const int32_t millis_age =
             (response.micros - response.event.micros) / 1000;
-        ConsolePrintF("pulso en dispositivo %03d%03d, hace %ld milisegundos",
-                      kReceiverNodeComboChannel, address, millis_age);
         node_sequences_[next_node_index_] = response.event.sequence;
+        if (response.event.type == Event::Type::kRisingEdge) {
+          ConsolePrintF("pulso en dispositivo %03d%03d, hace %ld milisegundos",
+                        kReceiverNodeComboChannel, address, millis_age);
+        } else {
+          ConsolePrintF("salida en dispositivo %03d%03d, hace %ld milisegundos",
+                        kReceiverNodeComboChannel, address, millis_age);
+        }
       }
     }
   }

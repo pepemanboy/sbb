@@ -8,6 +8,7 @@
 #include "apps/sumitomo_sensor/node_v2/hardware.h"
 #include "apps/sumitomo_sensor/node_v2/sensor.h"
 #include "common/bit_array.h"
+#include "common/edge_detector.h"
 #include "drivers/clock.h"
 #include "drivers/console.h"
 #include "drivers/debug_arduino.h"
@@ -91,15 +92,25 @@ bool Node::GetSensorRawReading() {
 }
 
 void Node::ReadSensor(int64_t now_micros) {
-  const bool rising_edge_detected =
+  const EdgeDetector::EdgeType edge_detected =
       sensor_.Poll(GetSensorRawReading(), now_micros);
   led_yellow_.Control(sensor_.debounced_state() ? Led::Command::kOn
                                                 : Led::Command::kOff);
 
-  if (rising_edge_detected) {
-    events_.PushAndMaybeEvict(
-        {.micros = now_micros, .sequence = ++event_sequence_});
-    SBB_DEBUGF("Card detected");
+  if (edge_detected == EdgeDetector::EdgeType::kNoEdge) return;
+  const Event::Type event_type =
+      edge_detected == EdgeDetector::EdgeType::kRisingEdge
+          ? Event::Type::kRisingEdge
+          : Event::Type::kFallingEdge;
+
+  events_.PushAndMaybeEvict({.type = event_type,
+                             .micros = now_micros,
+                             .sequence = ++event_sequence_});
+
+  if (event_type == Event::Type::kRisingEdge) {
+    SBB_DEBUG("Rising edge detected");
+  } else if (event_type == Event::Type::kFallingEdge) {
+    SBB_DEBUG("Falling edge detected");
   }
 }
 
