@@ -115,11 +115,11 @@ void Node::ReadSensor(int64_t now_micros) {
 }
 
 void Node::HandleMessages(int64_t now_micros) {
-  if (!hc12_.IsReadAvailable()) return;
-
-  const Span rx = hc12_.ReadBytesUntil(0);
-  if (unpacker_.Unpack(rx.buffer, rx.length)) {
-    if (MaybeProcessStatusQueryMessage(now_micros)) return;
+  while (hc12_.IsReadAvailable()) {
+    const Span rx = hc12_.ReadBytesUntil(0);
+    if (unpacker_.Unpack(rx.buffer, rx.length)) {
+      (void) MaybeProcessStatusQueryMessage(now_micros);
+    }
   }
 }
 
