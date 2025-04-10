@@ -59,6 +59,9 @@ bool Hc12Antenna::SetupOneTime(int channel) {
   digitalWrite(options_.set_pin, LOW);  // Enter setup mode
   delay(250);                           // As per datasheet
 
+  // Flush the read bytes that could be leftover from before entering setup.
+  while (serial_.available() > 0) serial_.read();
+
   char buf[20];
   SBB_DEBUG(F("Setting default settings"));
   sprintf(buf, "AT+DEFAULT");
