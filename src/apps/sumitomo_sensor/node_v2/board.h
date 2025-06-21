@@ -43,6 +43,19 @@ constexpr DipSwitchPins kDipSwitch = {
 constexpr GpioPin kInductiveSensor = {
     .mode = GpioMode::kInput, .polarity = GpioPolarity::kActiveLow, .pin = 3};
 
+// J2.
+constexpr GpioPin kTurretGreen = {
+    .mode = GpioMode::kOutput, .polarity = GpioPolarity::kActiveLow, .pin = 6};
+// J3.
+constexpr GpioPin kTurretYellow = {
+    .mode = GpioMode::kOutput, .polarity = GpioPolarity::kActiveLow, .pin = 8};
+// J4.
+constexpr GpioPin kTurretRed = {
+    .mode = GpioMode::kOutput, .polarity = GpioPolarity::kActiveLow, .pin = 11};
+// J5.
+constexpr GpioPin kTurretBuzzer = {
+    .mode = GpioMode::kOutput, .polarity = GpioPolarity::kActiveLow, .pin = 12};
+
 }  // namespace node_v2
 }  // namespace sumitomo_sensor
 }  // namespace sbb

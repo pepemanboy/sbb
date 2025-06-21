@@ -15,6 +15,11 @@ int HardwareDipSwitchGet();
 
 bool HardwareGetInductiveSensor();
 
+void HardwareTurretGreenSet(bool state);
+void HardwareTurretYellowSet(bool state);
+void HardwareTurretRedSet(bool state);
+void HardwareTurretBuzzerSet(bool state);
+
 }  // namespace node_v2
 }  // namespace sumitomo_sensor
 }  // namespace sbb

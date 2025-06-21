@@ -25,6 +25,11 @@ void HardwareInit() {
 
   // Inductive sensor.
   GpioConfigure(kInductiveSensor);
+
+  GpioConfigure(kTurretGreen);
+  GpioConfigure(kTurretYellow);
+  GpioConfigure(kTurretRed);
+  GpioConfigure(kTurretBuzzer);
 }
 
 void HardwareLedGreenSet(bool state) { GpioSet(kLedGreen, state); }
@@ -36,6 +41,14 @@ void HardwareLedYellowSet(bool state) { GpioSet(kLedYellow, state); }
 int HardwareDipSwitchGet() { return DipSwitchGet(kDipSwitch); }
 
 bool HardwareGetInductiveSensor() { return GpioGet(kInductiveSensor); }
+
+void HardwareTurretGreenSet(bool state) { GpioSet(kTurretGreen, state); }
+
+void HardwareTurretYellowSet(bool state) { GpioSet(kTurretYellow, state); }
+
+void HardwareTurretRedSet(bool state) { GpioSet(kTurretRed, state); }
+
+void HardwareTurretBuzzerSet(bool state) { GpioSet(kTurretBuzzer, state); }
 
 }  // namespace node_v2
 }  // namespace sumitomo_sensor

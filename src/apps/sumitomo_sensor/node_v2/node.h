@@ -30,6 +30,7 @@ class Node {
   bool GetSensorRawReading();
 
   void UpdateLeds(int64_t now_micros);
+  void UpdateTurret(int64_t now_micros);
   void ReadSensor(int64_t now_micros);
   void HandleMessages(int64_t now_micros);
 
@@ -54,6 +55,8 @@ class Node {
   uint32_t event_sequence_ = 0;
 
   Timer setup_timer_;
+
+  MaybeValid<int64_t> current_cycle_rising_edge_micros_ = {};
 };
 
 }  // namespace node_v2

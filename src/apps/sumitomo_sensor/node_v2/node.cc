@@ -21,6 +21,9 @@ namespace {
 
 constexpr int64_t kSetupInterval_micros = 61000000;  // 61s
 
+constexpr int64_t kTurretRedMinMicros = 205000000;
+constexpr int64_t kTurretYellowMinMicros = kTurretRedMinMicros - 10000000;
+
 Sensor::Options GetSensorOptions() { return {.debounce_micros = 5000000}; }
 
 bool sensor_interrupt_triggered_ = false;
@@ -54,6 +57,7 @@ void Node::Poll() {
   const int64_t now_micros = time_.Update(ClockMicros());
 
   UpdateLeds(now_micros);
+  UpdateTurret(now_micros);
 
   if (setup_timer_.Poll(now_micros)) {
     SetupHc12OrDie(kReceiverNodeComboChannel);
@@ -86,6 +90,32 @@ void Node::UpdateLeds(int64_t now_micros) {
   HardwareLedRedSet(led_red_.Poll(now_micros));
 }
 
+void Node::UpdateTurret(int64_t now_micros) {
+  if (!current_cycle_rising_edge_micros_.valid) {
+    HardwareTurretGreenSet(false);
+    HardwareTurretYellowSet(false);
+    HardwareTurretRedSet(false);
+    HardwareTurretBuzzerSet(false);
+  } else if (now_micros - current_cycle_rising_edge_micros_.value <
+             kTurretYellowMinMicros) {
+    HardwareTurretGreenSet(true);
+    HardwareTurretYellowSet(false);
+    HardwareTurretRedSet(false);
+    HardwareTurretBuzzerSet(false);
+  } else if (now_micros - current_cycle_rising_edge_micros_.value <
+             kTurretRedMinMicros) {
+    HardwareTurretGreenSet(false);
+    HardwareTurretYellowSet(true);
+    HardwareTurretRedSet(false);
+    HardwareTurretBuzzerSet(false);
+  } else {
+    HardwareTurretGreenSet(false);
+    HardwareTurretYellowSet(false);
+    HardwareTurretRedSet(true);
+    HardwareTurretBuzzerSet(true);
+  }
+}
+
 bool Node::GetSensorRawReading() {
   if (GetAndMaybeClearSensorInterrupt()) return true;
   return HardwareGetInductiveSensor();
@@ -108,8 +138,10 @@ void Node::ReadSensor(int64_t now_micros) {
                              .sequence = ++event_sequence_});
 
   if (event_type == Event::Type::kRisingEdge) {
+    current_cycle_rising_edge_micros_ = MakeValid(now_micros);
     SBB_DEBUG("Rising edge detected");
   } else if (event_type == Event::Type::kFallingEdge) {
+    current_cycle_rising_edge_micros_ = {};
     SBB_DEBUG("Falling edge detected");
   }
 }
@@ -118,7 +150,7 @@ void Node::HandleMessages(int64_t now_micros) {
   while (hc12_.IsReadAvailable()) {
     const Span rx = hc12_.ReadBytesUntil(0);
     if (unpacker_.Unpack(rx.buffer, rx.length)) {
-      (void) MaybeProcessStatusQueryMessage(now_micros);
+      (void)MaybeProcessStatusQueryMessage(now_micros);
     }
   }
 }
