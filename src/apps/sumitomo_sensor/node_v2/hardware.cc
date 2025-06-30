@@ -24,7 +24,8 @@ void HardwareInit() {
   DipSwitchConfigure(kDipSwitch);
 
   // Inductive sensor.
-  GpioConfigure(kInductiveSensor);
+  GpioConfigure(kCpgBuzzer);
+  GpioConfigure(kCpgLed);
 
   GpioConfigure(kTurretGreen);
   GpioConfigure(kTurretYellow);
@@ -40,7 +41,9 @@ void HardwareLedYellowSet(bool state) { GpioSet(kLedYellow, state); }
 
 int HardwareDipSwitchGet() { return DipSwitchGet(kDipSwitch); }
 
-bool HardwareGetInductiveSensor() { return GpioGet(kInductiveSensor); }
+bool HardwareCpgBuzzerGet() { return GpioGet(kCpgBuzzer); }
+
+bool HardwareCpgLedGet() { return GpioGet(kCpgLed); }
 
 void HardwareTurretGreenSet(bool state) { GpioSet(kTurretGreen, state); }
 

@@ -40,8 +40,12 @@ constexpr DipSwitchPins kDipSwitch = {
     .number_of_pins = 8,
 };
 
-constexpr GpioPin kInductiveSensor = {
-    .mode = GpioMode::kInput, .polarity = GpioPolarity::kActiveLow, .pin = 2};
+constexpr GpioPin kCpgBuzzer = {.mode = GpioMode::kInputPullUp,
+                                  .polarity = GpioPolarity::kActiveLow,
+                                  .pin = 2};
+constexpr GpioPin kCpgLed = {.mode = GpioMode::kInputPullUp,
+                               .polarity = GpioPolarity::kActiveLow,
+                               .pin = 3};
 
 // J2.
 constexpr GpioPin kTurretGreen = {

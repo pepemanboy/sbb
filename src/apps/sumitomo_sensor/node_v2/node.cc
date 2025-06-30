@@ -26,11 +26,19 @@ constexpr int64_t kTurretYellowMinMicros = kTurretRedMinMicros - 10000000;
 
 Sensor::Options GetSensorOptions() { return {.debounce_micros = 5000000}; }
 
-bool sensor_interrupt_triggered_ = false;
-void SensorInterruptCallback() { sensor_interrupt_triggered_ = true; }
-bool GetAndMaybeClearSensorInterrupt() {
-  if (!sensor_interrupt_triggered_) return false;
-  sensor_interrupt_triggered_ = false;
+bool cpg_buzzer_interrupt_triggered_ = false;
+void CpgBuzzerInterruptCallback() { cpg_buzzer_interrupt_triggered_ = true; }
+bool GetAndMaybeClearCpgBuzzerInterrupt() {
+  if (!cpg_buzzer_interrupt_triggered_) return false;
+  cpg_buzzer_interrupt_triggered_ = false;
+  return true;
+}
+
+bool cpg_led_interrupt_triggered_ = false;
+void CpgLedInterruptCallback() { cpg_led_interrupt_triggered_ = true; }
+bool GetAndMaybeClearCpgLedInterrupt() {
+  if (!cpg_led_interrupt_triggered_) return false;
+  cpg_led_interrupt_triggered_ = false;
   return true;
 }
 
@@ -44,8 +52,10 @@ Node::Node()
 void Node::Setup() {
   // SBB_DEBUG_ENABLE();
   HardwareInit();
-  GpioAttachInterrupt(kInductiveSensor, GpioInterruptTrigger::kFallingEdge,
-                      SensorInterruptCallback);
+  GpioAttachInterrupt(kCpgBuzzer, GpioInterruptTrigger::kFallingEdge,
+                      CpgBuzzerInterruptCallback);
+  GpioAttachInterrupt(kCpgLed, GpioInterruptTrigger::kFallingEdge,
+                      CpgLedInterruptCallback);
 
   // Read DIP switch to configure node ID.
   node_id_ = HardwareDipSwitchGet();
@@ -117,8 +127,10 @@ void Node::UpdateTurret(int64_t now_micros) {
 }
 
 bool Node::GetSensorRawReading() {
-  if (GetAndMaybeClearSensorInterrupt()) return true;
-  return HardwareGetInductiveSensor();
+  const bool cpg_buzzer =
+      GetAndMaybeClearCpgBuzzerInterrupt() || HardwareCpgBuzzerGet();
+  const bool cpg_led = GetAndMaybeClearCpgLedInterrupt() || HardwareCpgLedGet();
+  return cpg_buzzer && cpg_led;
 }
 
 void Node::ReadSensor(int64_t now_micros) {

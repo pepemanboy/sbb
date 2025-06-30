@@ -13,7 +13,8 @@ void HardwareLedYellowSet(bool state);
 
 int HardwareDipSwitchGet();
 
-bool HardwareGetInductiveSensor();
+bool HardwareCpgBuzzerGet();
+bool HardwareCpgLedGet();
 
 void HardwareTurretGreenSet(bool state);
 void HardwareTurretYellowSet(bool state);
