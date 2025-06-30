@@ -40,12 +40,13 @@ constexpr DipSwitchPins kDipSwitch = {
     .number_of_pins = 8,
 };
 
-constexpr GpioPin kCpgBuzzer = {.mode = GpioMode::kInputPullUp,
+// Buzzer has external pullup.
+constexpr GpioPin kCpgBuzzer = {.mode = GpioMode::kInput,
                                   .polarity = GpioPolarity::kActiveLow,
-                                  .pin = 2};
+                                  .pin = 3};
 constexpr GpioPin kCpgLed = {.mode = GpioMode::kInputPullUp,
                                .polarity = GpioPolarity::kActiveLow,
-                               .pin = 3};
+                               .pin = 2};
 
 // J2.
 constexpr GpioPin kTurretGreen = {
