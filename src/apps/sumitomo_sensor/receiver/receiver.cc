@@ -96,9 +96,6 @@ void Receiver::PollNode(int64_t now_micros) {
         if (response.event.type == Event::Type::kRisingEdge) {
           ConsolePrintF("pulso en dispositivo %03d%03d, hace %ld milisegundos",
                         kReceiverNodeComboChannel, address, millis_age);
-        } else {
-          ConsolePrintF("salida en dispositivo %03d%03d, hace %ld milisegundos",
-                        kReceiverNodeComboChannel, address, millis_age);
         }
       }
     }
